@@ -58,7 +58,10 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
     public int TriggerMask = 0;
     
     public int eventResetTime_current[]=new int[19];
-    public int eventResetTime_default[]=new int[19];    
+    public int eventResetTime_default[]=new int[19];  
+    
+    public int numberOfSamples;
+    public int sparseReading;
     
     public DetectorMonitor(String name){
         GStyle.getAxisAttributesX().setTitleFontSize(14); //24
@@ -195,7 +198,7 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
     public int     getFDTrigger()            {return (int)(this.trigger)&0x000000000ffffffff;}
     public int     getCDTrigger()            {return (int)(this.trigger>>32)&0x00000000ffffffff;}
     public boolean isGoodFD()                {return  getFDTrigger()>0;}    
-    public boolean isTrigBitSet(int bit)     {int mask=0; mask |= 1<<bit; return isTrigMaskSet(mask);}
+    public boolean isTrigBitSet(int bit)     {int mask=0;mask |= 1<<bit; return isTrigMaskSet(mask);}
     public boolean isTrigMaskSet(int mask)   {return (getFDTrigger()&mask)!=0;}
     public boolean isGoodECALTrigger(int is) {return (testTrigger)? is==getECALTriggerSector():true;}    
     public int           getElecTrigger()    {return getFDTrigger()&0x1;}
@@ -435,4 +438,12 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
         }
     }
         
+    public void setNumberOfSamples(int numberOfSamples){
+    	this.numberOfSamples=numberOfSamples;
+    }
+    
+    public void setSparseReading(int sparseReading){
+    	this.sparseReading=sparseReading;
+    }
+    
 }

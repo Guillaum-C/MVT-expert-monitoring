@@ -1,6 +1,7 @@
 package org.clas.viewer;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -19,7 +20,9 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -69,6 +72,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
     JTabbedPane tabbedpane           	    = null;
     JPanel mainPanel 			    = null;
     JMenuBar menuBar                        = null;
+<<<<<<< HEAD
     JTextPane clas12Textinfo                = new JTextPane();
     DataSourceProcessorPane processorPane   = null;
     EmbeddedCanvasTabbed CLAS12Canvas       = null;
@@ -82,31 +86,51 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
     private int ccdbRunNumber = 0;
     
     public String outPath = "/home/clasrun/CLAS12MON";
+=======
+    DataSourceProcessorPane processorPane 	= null;
+    JTextPane clas12Textinfo                = new JTextPane();
+    EmbeddedCanvasTabbed CLAS12Canvas       = null;
+    //EmbeddedCanvasTabbed CLAS12CDCanvas         = null;
+    
+    /* MVT PULSE DISPLAY */
+    MVTpulseViewer pulseWindowBMT = new MVTpulseViewer("BMT", 6, 1);
+    MVTpulseViewer pulseWindowFMT = new MVTpulseViewer("FMT", 6, 1);
+    MVTpulseViewer pulseWindowFTT = new MVTpulseViewer("FTT", 10, 0);
+    /* MVT PULSE DISPLAY */
+    
+    //CodaEventDecoder               decoder = new CodaEventDecoder();
+    CLASDecoder                clasDecoder = new CLASDecoder();
+    //DetectorEventDecoder   detectorDecoder = new DetectorEventDecoder();
+           
+    private int canvasUpdateTime   = 2000;
+    private int analysisUpdateTime = 100;
+    private int runNumber  = 2284;
+    private int ccdbRunNumber = 0;
+    
+>>>>>>> Monitoring-Expert/devel
     
     // detector monitors
     DetectorMonitor[] monitors = {
-        
-                new BMTmonitor("BMT"),        // 0
-                new BSTmonitor("BST"),        // 1
-                new CNDmonitor("CND"),        // 2
-                new CTOFmonitor("CTOF"),      // 3
-                new DCmonitor("DC"),          // 4
-                new ECmonitor("ECAL"),        // 5
-                new FMTmonitor("FMT"),        // 6
-                new FTCALmonitor("FTCAL"),    // 7
-                new FTHODOmonitor("FTHODO"),  // 8
-                new FTOFmonitor("FTOF"),      // 9
-                new FTTRKmonitor("FTTRK"),    // 10
-                new HTCCmonitor("HTCC"),      // 11
-                new LTCCmonitor("LTCC"),      // 12
-                new RICHmonitor("RICH"),      // 13
-                new RECmonitor("RECON"),      // 14
-             //   new TRKmonitor("TRK"),        // 15
-                new RFmonitor("RF"),          // 15
-                new HELmonitor("HEL"),        // 16
-                new FCUPmonitor("Faraday Cup"),  // 17
+                new BMTmonitor("BMT", pulseWindowBMT),        // 0 /* MVT PULSE DISPLAY */
+//                new BSTmonitor("BST"),        // 1
+//                new CNDmonitor("CND"),        // 2
+//                new CTOFmonitor("CTOF"),      // 3
+//                new DCmonitor("DC"),          // 4
+//                new ECmonitor("ECAL"),        // 5
+                new FMTmonitor("FMT", pulseWindowFMT),        // 6 /* MVT PULSE DISPLAY */
+//                new FTCALmonitor("FTCAL"),    // 7
+//                new FTHODOmonitor("FTHODO"),  // 8
+//                new FTOFmonitor("FTOF"),      // 9
+//                new FTTRKmonitor("FTTRK"),    // 10
+//                new HTCCmonitor("HTCC"),      // 11
+//                new LTCCmonitor("LTCC"),      // 12
+//                new RICHmonitor("RICH"),      // 13
+//                new RECmonitor("RECON"),      // 14
+                new FTTRKmonitor("FTTRK", pulseWindowFTT),        // 15
+//                new RFmonitor("RF"),          // 15
+//                new HELmonitor("HEL"),        // 16
+//                new FCUPmonitor("Faraday Cup"),  // 17
                 new TRIGGERmonitor("Trigger"),   // 18
-     
     };
         
     public EventViewer() {    	
@@ -157,10 +181,13 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         menuItem.getAccessibleContext().setAccessibleDescription("Set global z-axis lin scale");
         menuItem.addActionListener(this);
         settings.add(menuItem);
+<<<<<<< HEAD
         menuItem = new JMenuItem("Set DC occupancy scale max");
         menuItem.getAccessibleContext().setAccessibleDescription("Set DC occupancy scale max");
         menuItem.addActionListener(this);
         settings.add(menuItem);
+=======
+>>>>>>> Monitoring-Expert/devel
         menuItem = new JMenuItem("Set run number");
         menuItem.getAccessibleContext().setAccessibleDescription("Set run number");
         menuItem.addActionListener(this);
@@ -362,11 +389,21 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                 public void itemStateChanged(ItemEvent e) {
                 	
                     if(e.getStateChange() == ItemEvent.SELECTED) {
+<<<<<<< HEAD
                         for(int k=0; k<monitors.length; k++) {
                       	monitors[k].setTriggerMask(bit);
                         }
                     } else {
                         for(int k=0; k<monitors.length; k++) {
+=======
+                        //for(int k=0; k<19; k++) {
+                        for(int k=0; k<3; k++) {
+                      	monitors[k].setTriggerMask(bit);
+                        }
+                    } else {
+//                        for(int k=0; k<19; k++) {
+                        for(int k=0; k<3; k++) {
+>>>>>>> Monitoring-Expert/devel
                      	monitors[k].clearTriggerMask(bit);
                         }
                     };
@@ -417,10 +454,19 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         splitPanel.setRightComponent(CLAS12Canvas);
         JTextPane clas12Text   = new JTextPane();
         clas12Text.setText("CLAS12\n monitoring plots\n V2.0\n");
+<<<<<<< HEAD
         clas12Text.setEditable(false);       
         this.clas12Textinfo.setEditable(false);
         this.clas12Textinfo.setFont(new Font("Avenir",Font.PLAIN,16));
         this.clas12Textinfo.setBackground(CLAS12View.getBackground());
+=======
+//        clas12Text.setEditable(false);
+//        JTextPane clas12Textinfo  = new JTextPane();
+//        clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
+//        clas12Textinfo.setEditable(false);
+        clas12Text.setEditable(false);       
+        this.clas12Textinfo.setEditable(false);
+>>>>>>> Monitoring-Expert/devel
         StyledDocument styledDoc = clas12Text.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -452,6 +498,12 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         this.setCanvasUpdate(canvasUpdateTime);
         this.plotSummaries();
         
+        /* MVT PULSE DISPLAY */
+        pulseWindowBMT.draw(tabbedpane);
+        pulseWindowFMT.draw(tabbedpane);
+        pulseWindowFTT.draw(tabbedpane);
+        /* MVT PULSE DISPLAY */
+        
     }
       
     public void actionPerformed(ActionEvent e) {
@@ -465,6 +517,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         if(e.getActionCommand()=="Set global z-axis lin scale") {
            for(int k=0; k<this.monitors.length; k++) {this.monitors[k].setLogZ(false);this.monitors[k].plotHistos();}
         }
+<<<<<<< HEAD
         if(e.getActionCommand()=="Set DC occupancy scale max") {
            setDCRange(e.getActionCommand());
         }
@@ -472,6 +525,13 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
            setRunNumber(e.getActionCommand());
         }
 
+=======
+        
+        if(e.getActionCommand()=="Set run number") {
+        	setRunNumber(e.getActionCommand());
+        }
+        
+>>>>>>> Monitoring-Expert/devel
         if(e.getActionCommand()=="Open histograms file") {
             String fileName = null;
             JFileChooser fc = new JFileChooser();
@@ -733,13 +793,21 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
          
          
          if (e.getActionCommand()=="Default for all"){
+<<<<<<< HEAD
             for (int k=0;k<monitors.length;k++){
+=======
+            for (int k=0;k<3;k++){
+>>>>>>> Monitoring-Expert/devel
                 this.monitors[k].eventResetTime_current[k] = this.monitors[k].eventResetTime_default[k];
             }
         }
          
          if (e.getActionCommand()=="Disable histogram reset"){
+<<<<<<< HEAD
             for (int k=0;k<monitors.length;k++){
+=======
+            for (int k=0;k<3;k++){
+>>>>>>> Monitoring-Expert/devel
                 this.monitors[k].eventResetTime_current[k] = 0;
             }
         }
@@ -829,6 +897,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
 	    if(event!=null ){
             //event.show();
+<<<<<<< HEAD
             
             if(event instanceof EvioDataEvent){
              	hipo = (HipoDataEvent) clasDecoder.getDataEvent(event);
@@ -842,6 +911,34 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     System.out.println("Setting run number to: " +this.runNumber);
                     resetEventListener();
                     this.clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
+=======
+//
+//            if (event.getType() == DataEventType.EVENT_START) {
+//                this.runNumber = this.getRunNumber(event);
+//                System.out.println("RunNumber: "+this.runNumber);
+//            }
+//            
+//            if(this.runNumber != this.getRunNumber(event)) {
+////                this.saveToFile("mon12_histo_run_" + runNumber + ".hipo");
+//                this.runNumber = this.getRunNumber(event);
+//                System.out.println("RunNumber: "+this.runNumber);
+//                resetEventListener();
+//            }
+            
+            if(event instanceof EvioDataEvent){
+             	hipo = (HipoDataEvent) clasDecoder.getDataEvent(event);
+//                DataBank   header = clasDecoder.createHeaderBank(hipo, 0, 0, (float) 0, (float) 0);
+             	DataBank   header = clasDecoder.createHeaderBank(hipo, this.ccdbRunNumber, 0, (float) 0, (float) 0);
+             	DataBank  trigger = clasDecoder.createTriggerBank(hipo);
+             	hipo.appendBanks(header);
+             	hipo.appendBank(trigger);
+             	if(this.runNumber != this.getRunNumber(hipo)) {
+//                this.saveToFile("mon12_histo_run_" + runNumber + ".hipo");
+             	this.runNumber = this.getRunNumber(hipo);
+             	System.out.println("Setting run number to: " +this.runNumber);
+             	resetEventListener();
+             	this.clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
+>>>>>>> Monitoring-Expert/devel
 //                    this.clas12Textinfo.updateUI();
                 }
             } 
@@ -879,56 +976,63 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
         // DC
         this.CLAS12Canvas.getCanvas("FD").cd(0);
-        if(this.monitors[4].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[4].getDetectorSummary().getH1F("summary")); 
+        //if(this.monitors[4].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[4].getDetectorSummary().getH1F("summary")); 
         // HTTC
         this.CLAS12Canvas.getCanvas("FD").cd(1);
-        if(this.monitors[11].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[11].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[11].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[11].getDetectorSummary().getH1F("summary"));
         // LTTC
         this.CLAS12Canvas.getCanvas("FD").cd(2);
-        if(this.monitors[12].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[12].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[12].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[12].getDetectorSummary().getH1F("summary"));
         // RICH
         this.CLAS12Canvas.getCanvas("FD").cd(3);
         this.CLAS12Canvas.getCanvas("FD").getPad(3).getAxisZ().setLog(true);
-        if(this.monitors[13].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[13].getDetectorSummary().getH2F("summary"));
+        //if(this.monitors[13].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[13].getDetectorSummary().getH2F("summary"));
         
         // ECAL 
         this.CLAS12Canvas.getCanvas("FD").cd(4);
         this.CLAS12Canvas.getCanvas("FD").getPad(4).getAxisZ().setLog(true);
-        if(this.monitors[5].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[5].getDetectorSummary().getH2F("sumPCAL"));
+        //if(this.monitors[5].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[5].getDetectorSummary().getH2F("sumPCAL"));
         this.CLAS12Canvas.getCanvas("FD").cd(5);
         this.CLAS12Canvas.getCanvas("FD").getPad(5).getAxisZ().setLog(true);
-        if(this.monitors[5].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[5].getDetectorSummary().getH2F("sumECin"));
+        //if(this.monitors[5].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[5].getDetectorSummary().getH2F("sumECin"));
    
         // FMT:
         this.CLAS12Canvas.getCanvas("FD").cd(6);
         this.CLAS12Canvas.getCanvas("FD").getPad(6).getAxisZ().setLog(true);
-        if(this.monitors[6].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[6].getDetectorSummary().getH2F("summary"));
+        //if(this.monitors[6].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[6].getDetectorSummary().getH2F("summary"));
         
         // FTOF:
         this.CLAS12Canvas.getCanvas("FD").cd(7);
         this.CLAS12Canvas.getCanvas("FD").getPad(7).getAxisZ().setLog(true);
+<<<<<<< HEAD
         if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH1F("sum_p1"));
         this.CLAS12Canvas.getCanvas("FD").cd(8);
         this.CLAS12Canvas.getCanvas("FD").getPad(8).getAxisZ().setLog(true);
         if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH1F("sum_p2"));
+=======
+        //if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH2F("sum_p1"));
+        this.CLAS12Canvas.getCanvas("FD").cd(8);
+        this.CLAS12Canvas.getCanvas("FD").getPad(8).getAxisZ().setLog(true);
+        //if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH2F("sum_p2"));
+>>>>>>> Monitoring-Expert/devel
         
         //////////////////////////////////////////////////
         ///  CD:
         
         // CND
         this.CLAS12Canvas.getCanvas("CD").cd(0);
-        if(this.monitors[2].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[2].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[2].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[2].getDetectorSummary().getH1F("summary"));
         // CTOF
         this.CLAS12Canvas.getCanvas("CD").cd(1);
-        if(this.monitors[3].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[3].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[3].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[3].getDetectorSummary().getH1F("summary"));
         // BVT
         this.CLAS12Canvas.getCanvas("CD").cd(2);
         this.CLAS12Canvas.getCanvas("CD").getPad(2).getAxisZ().setLog(true);
-        if(this.monitors[0].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[0].getDetectorSummary().getH2F("summary"));
+        //if(this.monitors[0].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[0].getDetectorSummary().getH2F("summary"));
         // BST
         this.CLAS12Canvas.getCanvas("CD").cd(3);
         this.CLAS12Canvas.getCanvas("CD").getPad(3).getAxisZ().setLog(true);
-        if(this.monitors[1].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[1].getDetectorSummary().getH2F("summary"));
+        //if(this.monitors[1].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("CD").draw(this.monitors[1].getDetectorSummary().getH2F("summary"));
         
         
         
@@ -937,13 +1041,13 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
         // FTCAL
         this.CLAS12Canvas.getCanvas("FT").cd(0);
-        if(this.monitors[7].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[7].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[7].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[7].getDetectorSummary().getH1F("summary"));
         // FTHODO
         this.CLAS12Canvas.getCanvas("FT").cd(1);
-        if(this.monitors[8].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[8].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[8].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[8].getDetectorSummary().getH1F("summary"));
         // FTTRK
         this.CLAS12Canvas.getCanvas("FT").cd(2);
-        if(this.monitors[0].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[10].getDetectorSummary().getH1F("summary"));
+        //if(this.monitors[0].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FT").draw(this.monitors[10].getDetectorSummary().getH1F("summary"));
         
         ////////////////////////////////////////////////////
       
@@ -986,8 +1090,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
         System.out.println("Histogram pngs succesfully saved in: " + data);
     }
-    
-    
+       
     public void createHistoPDF() {
         /*
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
@@ -1018,9 +1121,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         */
     }
     
-    
-    
-
     @Override
     public void processShape(DetectorShape2D shape) {
         System.out.println("SHAPE SELECTED = " + shape.getDescriptor());
@@ -1091,8 +1191,52 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         frame.setJMenuBar(viewer.menuBar);
         frame.setSize(xSize, ySize);
         frame.setVisible(true);
+        if (args.length>0){
+        	if (args[0]!=null){
+        		int numberOfSamples = Integer.parseInt(args[0]);
+        		if (0<numberOfSamples && numberOfSamples<100){
+        			viewer.monitors[0].setNumberOfSamples(numberOfSamples);
+        			viewer.monitors[1].setNumberOfSamples(numberOfSamples);
+        			
+        			if (args[2]!=null){
+                        int sparseReading = Integer.parseInt(args[3]);
+                        if (0<sparseReading && sparseReading<100){
+                        	viewer.monitors[0].setSparseReading(sparseReading);
+                        	viewer.monitors[1].setSparseReading(sparseReading);
+                		}
+                        
+                        viewer.pulseWindowBMT = new MVTpulseViewer("BMT", numberOfSamples, sparseReading);
+                        viewer.pulseWindowFMT = new MVTpulseViewer("FMT", numberOfSamples, sparseReading);
+                    }else{
+                    	viewer.pulseWindowBMT = new MVTpulseViewer("BMT", numberOfSamples, 0);
+                    	viewer.pulseWindowFMT = new MVTpulseViewer("FMT", numberOfSamples, 0);
+                    }
+        			
+        			
+        		}
+        	}
+        	if (args[1]!=null){
+        		int numberOfSamples = Integer.parseInt(args[2]);
+        		if (0<numberOfSamples && numberOfSamples<100){
+        			viewer.monitors[2].setNumberOfSamples(numberOfSamples);
+        		}
+        		if (args[3]!=null){
+                    int sparseReading = Integer.parseInt(args[4]);
+                    if (0<sparseReading && sparseReading<100){
+                    	viewer.monitors[2].setSparseReading(sparseReading);
+            		}
+                    
+                    viewer.pulseWindowFTT = new MVTpulseViewer("FTT", numberOfSamples, sparseReading);
+                }else{
+                	viewer.pulseWindowFTT = new MVTpulseViewer("FTT", numberOfSamples, 0);
+                }
+        	}
+        	
+        }
+        
     }
     
+<<<<<<< HEAD
     
     private void setDCRange(String actionCommand) {
     
@@ -1116,6 +1260,15 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
         if (RUN_number != null) { 
             int cur_runNumber= this.runNumber;
+=======
+    private void setRunNumber(String actionCommand) {
+        
+    	System.out.println("Set run number for CCDB access");
+    	String  RUN_number = (String) JOptionPane.showInputDialog(null, "Set run number to ", " ", JOptionPane.PLAIN_MESSAGE, null, null, "2284");
+    	
+    	if (RUN_number != null) { 
+    		int cur_runNumber= this.runNumber;
+>>>>>>> Monitoring-Expert/devel
             try {
                 cur_runNumber = Integer.parseInt(RUN_number);
             } 
@@ -1125,10 +1278,16 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
             if (cur_runNumber > 0){ 
                 this.ccdbRunNumber = cur_runNumber;
                 clasDecoder.setRunNumber(cur_runNumber,true);
+<<<<<<< HEAD
             } 
             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
         }
         
+=======
+            }
+    		else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
+    	}    
+>>>>>>> Monitoring-Expert/devel
     }
 
     private void resetHistograms(String actionCommand) {
@@ -1242,14 +1401,14 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     if (resetOption == JOptionPane.YES_OPTION) {
                         String  resetTiming = (String) JOptionPane.showInputDialog(null, "Update every (number of events)", " ", JOptionPane.PLAIN_MESSAGE, null, null, "10000");
                         if (resetTiming != null) {    
-                            int time = this.monitors[6].eventResetTime_default[6];
+                            int time = this.monitors[1].eventResetTime_default[1];
                             try {time = Integer.parseInt(resetTiming);} 
                             catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
-                            if (time > 0) {this.monitors[6].eventResetTime_current[6] = time;} 
+                            if (time > 0) {this.monitors[1].eventResetTime_current[1] = time;} 
                             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
                         }
                     }else if (resetOption == JOptionPane.NO_OPTION){
- 			this.monitors[6].eventResetTime_current[6] = 0;
+                    	this.monitors[1].eventResetTime_current[1] = 0;
                     }	
          }
         
@@ -1259,20 +1418,16 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     if (resetOption == JOptionPane.YES_OPTION) {
                         String  resetTiming = (String) JOptionPane.showInputDialog(null, "Update every (number of events)", " ", JOptionPane.PLAIN_MESSAGE, null, null, "10000");
                         if (resetTiming != null) {    
-                            int time = this.monitors[7].eventResetTime_default[7];
+                            int time = this.monitors[2].eventResetTime_default[2];
                             try {time = Integer.parseInt(resetTiming);} 
                             catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
                             if (time > 0) {
-                                this.monitors[7].eventResetTime_current[7] = time;
-                                this.monitors[8].eventResetTime_current[8] = time;
-                                this.monitors[10].eventResetTime_current[10] = time;
+                                this.monitors[2].eventResetTime_current[2] = time;
                             } 
                             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
                         }
                     }else if (resetOption == JOptionPane.NO_OPTION){
- 			this.monitors[7].eventResetTime_current[7] = 0;
-                        this.monitors[8].eventResetTime_current[8] = 0;
-                        this.monitors[10].eventResetTime_current[10] = 0;
+                    	this.monitors[2].eventResetTime_current[2] = 0;
                     }	
          }
         
@@ -1418,19 +1573,22 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     if (resetOption == JOptionPane.YES_OPTION) {
                         String  resetTiming = (String) JOptionPane.showInputDialog(null, "Update every (number of events)", " ", JOptionPane.PLAIN_MESSAGE, null, null, "10000");
                         if (resetTiming != null) {    
-                            int time = this.monitors[18].eventResetTime_default[18];
+                        	int time = this.monitors[3].eventResetTime_default[3];
+                            //int time = this.monitors[18].eventResetTime_default[18];
                             try {time = Integer.parseInt(resetTiming);} 
                             catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
-                            if (time > 0) {this.monitors[18].eventResetTime_current[18] = time;} 
+                            if (time > 0) {this.monitors[3].eventResetTime_current[3] = time;} 
+                            //if (time > 0) {this.monitors[18].eventResetTime_current[18] = time;} 
                             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
                         }
                     }else if (resetOption == JOptionPane.NO_OPTION){
- 			this.monitors[18].eventResetTime_current[18] = 0;
+            this.monitors[3].eventResetTime_current[3] = 0;
+ 			//this.monitors[18].eventResetTime_current[18] = 0;
                     }	
          }
-        
-        
+         
     }
 
-   
+    
+    
 }
