@@ -1,21 +1,21 @@
 package org.clas.detectors;
 
+import java.io.FileDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.clas.structures.Cluster;
-import org.clas.structures.Event;
-import org.clas.structures.Hit;
 import org.clas.viewer.DetectorMonitor;
 import org.clas.viewer.EventViewer;
 import org.jlab.detector.calib.utils.ConstantsManager;
 import org.jlab.detector.calib.utils.DatabaseConstantProvider;
+import org.jlab.geom.prim.Vector3D;
 import org.jlab.groot.data.H1F;
 import org.jlab.groot.data.H2F;
 import org.jlab.groot.group.DataGroup;
 import org.jlab.io.base.DataBank;
 import org.jlab.io.base.DataEvent;
+import org.jlab.rec.cvt.bmt.Constants;
 import org.jlab.rec.cvt.services.CVTReconstruction;
 import org.jlab.utils.groups.IndexedTable;
 
@@ -23,25 +23,6 @@ import org.jlab.utils.groups.IndexedTable;
  * @author guillaum
  */
 public class BMTmonitor extends DetectorMonitor {
-<<<<<<< HEAD
-	int numberOfSamples;
-	int samplingTime;
-
-	int maxNumberLayer;
-	int maxNumberSector;
-	int maxNumberStrips;
-	int numberOfStripsPerChip;
-	int numberOfChips;
-	int binDivision;
-	int numberStrips[];
-    int numberDream[];
-
-	double hitNumber[][][];
-	int hitNumberDream [];
-	int timeMax[][][][];
-	int layerHit[][];
-	boolean isZ[];
-=======
 	
 	int count=0;
 	
@@ -59,15 +40,12 @@ public class BMTmonitor extends DetectorMonitor {
 	/* ===== DAQ CONSTANTS ===== */
 	
 	int  runNumber = 10;
->>>>>>> Monitoring-Expert/devel
 	boolean mask[][][];
 	short adcOffset;
 	double sigmaThreshold;
 	double noise = 10; /* To be added in CCDB */
 	int samplingTime;
-	int numberOfSamples = 6; /* To be added in CCDB */
-	boolean numberOfSamplesTested = false;
-	int sparseReading = 1;
+	int numberOfSamples = 10; /* To be added in CCDB */
 	
 	/* ===== DATA STORAGE & DISPLAY ===== */
 	
@@ -97,47 +75,6 @@ public class BMTmonitor extends DetectorMonitor {
 		
 		super(name);
 		
-<<<<<<< HEAD
-		numberOfSamples = 10;
-		samplingTime = 40;
-		maxNumberLayer = 6;
-		maxNumberSector = 3;
-		maxNumberStrips = 1152;
-		numberOfStripsPerChip = 64 ;
-                
-		numberOfChips = 240;
-		isZ = new boolean[maxNumberLayer +1];
-		mask = new boolean[maxNumberSector + 1][maxNumberLayer + 1][maxNumberStrips + 1];
-		
-                hitNumberDream = new int [numberOfChips+1];
-		numberStrips = new int[maxNumberLayer + 1];
-                numberDream = new int[maxNumberLayer + 1];
-		
-		numberStrips[1] = 896;
-		numberStrips[2] = 640;
-		numberStrips[3] = 640;
-		numberStrips[4] = 1024;
-		numberStrips[5] = 768;
-		numberStrips[6] = 1152;
-		
-		numberDream[1] = 14;
-		numberDream[2] = 10;
-		numberDream[3] = 10;
-		numberDream[4] = 16;
-		numberDream[5] = 12;
-		numberDream[6] = 18; 
-
-		isZ[1] = false;
-		isZ[2] = true;
-		isZ[3] = true;
-		isZ[4] = false;
-		isZ[5] = true;
-		isZ[6] = false;
-		
-		for (int sector = 1; sector <= maxNumberSector; sector++) {
-			for (int layer = 1; layer <= maxNumberLayer; layer++) {
-				for (int component = 1 ; component <= numberStrips[layer]; component++){
-=======
 		this.pulseViewer=pulseViewer;
 		
 		/* ===== LOAD GEOMETRY CONSTANTS ===== */
@@ -174,15 +111,10 @@ public class BMTmonitor extends DetectorMonitor {
 		for (int sector = 1; sector <= numberOfSectors; sector++) {
 			for (int layer = 1; layer <= numberOfLayers; layer++) {
 				for (int component = 1 ; component <= numberOfStrips[layer]; component++){
->>>>>>> Monitoring-Expert/devel
 					mask[sector][layer][component]=true;
 				}
 			}
 		}
-<<<<<<< HEAD
-		
-		this.setDetectorTabNames("Occupancies", "Occupancy C", "Occupancy Z", "TimeMax", "Multiplicity");
-=======
 //		mask[1][1][80] = false;
 //		mask[1][1][82] = false;
 //		
@@ -228,8 +160,7 @@ public class BMTmonitor extends DetectorMonitor {
 		
 		/* ===== DECLARE TABS ===== */
 		
-		this.setDetectorTabNames("Occupancies", "Occupancy", "Occupancy C", "Occupancy Z", "NbHits vs Time", "Tile Multiplicity", "Tile Occupancy", "MaxADC", "MaxADC vs Strip", "IntegralPulse", "IntegralPulse vs Strip", "TimeMax", "TimeMaxCut","TimeMaxNoFit", "TimeMax vs Strip", "TimeMax per Dream", "ToT", "ToT per strip","FToT","FToT per strip", "OccupancyStrip", "OccupancyClusters", "NbClusters vs Time", "Cluster Multiplicity", "ClusterCharge", "ClusterCharge per strip", "ClusterSize", "ClusterSize per strip", "ClusterSize vs angle", "Occupancy vs angle", "OccupancyReco", "Residuals", "MaxAdcOfCentroid", "MaxAdcOfCentroid per strip", "TimeOfCentroid", "TimeOfCentroid per strip","hitMultiplicity");
->>>>>>> Monitoring-Expert/devel
+		this.setDetectorTabNames("Occupancies", "Occupancy", "Occupancy C", "Occupancy Z", "NbHits vs Time", "Tile Multiplicity", "Tile Occupancy", "MaxADC", "MaxADC vs Strip", "IntegralPulse", "IntegralPulse vs Strip", "TimeMax", "TimeMax vs Strip", "TimeMax per Dream", "ToT", "ToT per strip","FToT","FToT per strip", "OccupancyClusters", "NbClusters vs Time", "ClusterCharge", "ClusterCharge per strip", "ClusterSize", "ClusterSize per strip", "ClusterSize vs angle", "OccupancyReco", "Residuals", "MaxAdcOfCentroid", "MaxAdcOfCentroid per strip", "TimeOfCentroid", "TimeOfCentroid per strip","hitMultiplicity");
 		this.init(false);
 	}
 
@@ -251,12 +182,6 @@ public class BMTmonitor extends DetectorMonitor {
 		occupancyHisto.setTitleY("Detector");
 		occupancyGroup.addDataSet(occupancyHisto, 0);
 		
-<<<<<<< HEAD
-		for (int sector = 1; sector <= maxNumberSector; sector++) {
-			for (int layer = 1; layer <= maxNumberLayer; layer++) {
-				H1F hitmapHisto = new H1F("Occupancy Layer " + layer + " Sector " + sector, "Occupancy Layer " + layer + " Sector " + sector,
-						(numberStrips[layer])+1, 0., (double) (numberStrips[layer])+1);
-=======
 		H1F hitMultiplicityHisto = new H1F("hitMultiplicity", "hitMultiplicity", 1000, 1., 1001);
 		hitMultiplicityHisto.setTitleX("Multiplicity");
 		hitMultiplicityHisto.setTitleY("Nb events");
@@ -286,7 +211,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}
 				occupancyGroup.addDataSet(hitsVSTimeHisto, 2);
 				
-				H1F multiplicityHisto = new H1F("Multiplicity : Layer " + layer + " Sector " + sector, "Multiplicity :Layer " + layer + " Sector " + sector,
+				H1F multiplicityHisto = new H1F("Multiplicity : Layer " + layer + " Sector " + sector, "ADCMax :Layer " + layer + " Sector " + sector,
 						300, 0, 300);
 				multiplicityHisto.setTitleX("Multiplicity (Layer " + layer + " Sector " + sector+")");
 				//multiplicityHisto.setTitleY("Nb hits");
@@ -378,7 +303,7 @@ public class BMTmonitor extends DetectorMonitor {
 		for (int sector = 1; sector <= numberOfSectors; sector++) {
 			for (int layer = 1; layer <= numberOfLayers; layer++) {
 				H1F timeMaxHisto = new H1F("TimeOfMax : Layer " + layer + " Sector " + sector, "TimeOfMax : Layer " + layer + " Sector " + sector,
-						samplingTime*(numberOfSamples*(1+sparseReading)-1)+1, 0,samplingTime*(numberOfSamples*(1+sparseReading)-1) );
+						samplingTime*(numberOfSamples+1), 1.,samplingTime*(numberOfSamples+1) );
 				timeMaxHisto.setTitleX("Time of max (Layer " + layer + " Sector " + sector+")");
 				timeMaxHisto.setTitleY("Nb hits");
 				if (isZ[layer]==1){
@@ -387,28 +312,6 @@ public class BMTmonitor extends DetectorMonitor {
 					timeMaxHisto.setFillColor(8);
 				}
 				timeGroup.addDataSet(timeMaxHisto, 1);
-				
-				H1F timeMaxCutHisto = new H1F("TimeOfMax cut : Layer " + layer + " Sector " + sector, "TimeOfMax cut : Layer " + layer + " Sector " + sector,
-						samplingTime*(numberOfSamples*(1+sparseReading)-1)+1, 0,samplingTime*(numberOfSamples*(1+sparseReading)-1) );
-				timeMaxCutHisto.setTitleX("Time of max (Layer " + layer + " Sector " + sector+")");
-				timeMaxCutHisto.setTitleY("Nb hits");
-				if (isZ[layer]==1){
-					timeMaxCutHisto.setFillColor(4);
-				}else{
-					timeMaxCutHisto.setFillColor(8);
-				}
-				timeGroup.addDataSet(timeMaxCutHisto, 2);
-				
-				H1F timeMaxNoFitHisto = new H1F("TimeOfMax no fit : Layer " + layer + " Sector " + sector, "TimeOfMax no fit : Layer " + layer + " Sector " + sector,
-						samplingTime*(numberOfSamples*(1+sparseReading)-1)+1, 0,samplingTime*(numberOfSamples*(1+sparseReading)-1) );
-				timeMaxNoFitHisto.setTitleX("Time of max (Layer " + layer + " Sector " + sector+")");
-				timeMaxNoFitHisto.setTitleY("Nb hits");
-				if (isZ[layer]==1){
-					timeMaxNoFitHisto.setFillColor(4);
-				}else{
-					timeMaxNoFitHisto.setFillColor(8);
-				}
-				timeGroup.addDataSet(timeMaxNoFitHisto, 3);
 				
 				H1F timeMaxVSStripHisto = new H1F("TimeOfMax vs Strip : Layer " + layer + " Sector " + sector, "TimeOfMax vs Strip : Layer " + layer + " Sector " + sector,
 						(numberOfStrips[layer]), 1., (double) (numberOfStrips[layer])+1);
@@ -419,7 +322,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					timeMaxVSStripHisto.setFillColor(8);
 				}
-				timeGroup.addDataSet(timeMaxVSStripHisto, 4);
+				timeGroup.addDataSet(timeMaxVSStripHisto, 2);
 				
 				H1F totHisto = new H1F("ToT : Layer " + layer + " Sector " + sector, "ToT : Layer " + layer + " Sector " + sector,
 						numberOfSamples-1, 0.,numberOfSamples-1 );
@@ -430,7 +333,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					totHisto.setFillColor(8);
 				}
-				timeGroup.addDataSet(totHisto, 5);
+				timeGroup.addDataSet(totHisto, 3);
 				
 				H1F totPerStripHisto = new H1F("ToT per strip : Layer " + layer + " Sector " + sector, "ToT per strip : Layer " + layer + " Sector " + sector,
 						(numberOfStrips[layer]), 1., (double) (numberOfStrips[layer])+1);
@@ -441,7 +344,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					totPerStripHisto.setFillColor(8);
 				}
-				timeGroup.addDataSet(totPerStripHisto, 6);				
+				timeGroup.addDataSet(totPerStripHisto, 4);				
 				
 				H1F ftotHisto = new H1F("FToT : Layer " + layer + " Sector " + sector, "FToT : Layer " + layer + " Sector " + sector,
 						numberOfSamples-1, 0.,numberOfSamples-1 );
@@ -452,7 +355,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					ftotHisto.setFillColor(8);
 				}
-				timeGroup.addDataSet(ftotHisto, 7);
+				timeGroup.addDataSet(ftotHisto, 5);
 				
 				H1F ftotPerStripHisto = new H1F("FToT per strip : Layer " + layer + " Sector " + sector, "FToT per strip : Layer " + layer + " Sector " + sector,
 						(numberOfStrips[layer]), 1., (double) (numberOfStrips[layer])+1);
@@ -463,7 +366,7 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					ftotPerStripHisto.setFillColor(8);
 				}
-				timeGroup.addDataSet(ftotPerStripHisto, 8);
+				timeGroup.addDataSet(ftotPerStripHisto, 6);
 			}
 		}
 
@@ -516,7 +419,6 @@ public class BMTmonitor extends DetectorMonitor {
 				
 				H1F hitmapHisto = new H1F("HitmapClusters : Layer " + layer + " Sector " + sector, "HitmapClusters : Layer " + layer + " Sector " + sector,
 						(numberOfStrips[layer]), 1., (double) (numberOfStrips[layer])+1);
->>>>>>> Monitoring-Expert/devel
 				hitmapHisto.setTitleX("Strips (Layer " + layer  + " Sector " + sector+")");
 				hitmapHisto.setTitleY("Nb clusters");
 				if (isZ[layer]==1){
@@ -524,25 +426,8 @@ public class BMTmonitor extends DetectorMonitor {
 				}else{
 					hitmapHisto.setFillColor(8);
 				}
-<<<<<<< HEAD
-				DataGroup hitmapGroup = new DataGroup("");
-				hitmapGroup.addDataSet(hitmapHisto, 0);
-				this.getDataGroup().add(hitmapGroup, sector, layer,2);
-				
-				H1F timeMaxHisto = new H1F("TimeOfMax : Layer " + layer + " Sector " + sector, "TimeOfMax : Layer " + layer + " Sector " + sector,
-						samplingTime*(numberOfSamples+1), 1.,samplingTime*(numberOfSamples+1) );
-				timeMaxHisto.setTitleX("Time of max (Layer " + layer + " Sector " + sector+")");
-				timeMaxHisto.setTitleY("Nb hits");
-				if (isZ[layer]){
-					timeMaxHisto.setFillColor(4);
-				}else{
-					timeMaxHisto.setFillColor(8);
-				}
-				DataGroup timeOfMaxGroup = new DataGroup("");
-				timeOfMaxGroup.addDataSet(timeMaxHisto, 0);
-				this.getDataGroup().add(timeOfMaxGroup, sector, layer, 1);
-=======
 				occupancyGroup.addDataSet(hitmapHisto, 3);
+				
 				
 				H1F hitsVSTimeHisto = new H1F("NbClusters vs Time : Layer " + layer + " Sector " + sector, "NbClusters vs Time : Layer " + layer + " Sector " + sector,
 						100, 0, 100);
@@ -554,29 +439,6 @@ public class BMTmonitor extends DetectorMonitor {
 					hitsVSTimeHisto.setFillColor(8);
 				}
 				occupancyGroup.addDataSet(hitsVSTimeHisto, 4);
-				
-				H1F stripMultiplicityHisto = new H1F("OccupancyStrip : Layer " + layer + " Sector " + sector, "HitmapClusters : Layer " + layer + " Sector " + sector,
-						(numberOfStrips[layer]), 1., (double) (numberOfStrips[layer])+1);
-				stripMultiplicityHisto.setTitleX("Strips (Layer " + layer  + " Sector " + sector+")");
-				stripMultiplicityHisto.setTitleY("Occupancy (%)");
-				if (isZ[layer]==1){
-					stripMultiplicityHisto.setFillColor(4);
-				}else{
-					stripMultiplicityHisto.setFillColor(8);
-				}
-				occupancyGroup.addDataSet(stripMultiplicityHisto, 8);
-				
-				H1F clusterMultiplicityHisto = new H1F("Cluster Multiplicity : Layer " + layer + " Sector " + sector, "Cluster Multiplicity :Layer " + layer + " Sector " + sector,
-						51, -0.5, 50.5);
-				clusterMultiplicityHisto.setTitleX("Cluster Multiplicity (Layer " + layer + " Sector " + sector+")");
-				clusterMultiplicityHisto.setTitleY("Nb events");
-				if (isZ[layer]==1){
-					clusterMultiplicityHisto.setFillColor(4);
-				}else{
-					clusterMultiplicityHisto.setFillColor(8);
-				}
-				clusterMultiplicityHisto.setOptStat(110);
-				occupancyGroup.addDataSet(clusterMultiplicityHisto, 5);
 				
 				
 				H1F clusterChargeHisto = new H1F("ClusterCharge : Layer " + layer + " Sector " + sector,
@@ -624,7 +486,7 @@ public class BMTmonitor extends DetectorMonitor {
 				adcGroup.addDataSet(clusterSizePerStripHisto, 7);
 				
 				H1F clusterSizeVsAngleHisto = new H1F("ClusterSize vs angle : Layer " + layer + " Sector " + sector,
-						"ClusterSize vs angle : Layer " + layer + " Sector " + sector, 360, -180, 180);
+						"ClusterSize vs angle : Layer " + layer + " Sector " + sector, 360, 0, 360);
 				clusterSizeVsAngleHisto.setTitleX("Angle (Layer " + layer + " Sector " + sector+")");
 				clusterSizeVsAngleHisto.setTitleY("Cluster Size");
 				if (isZ[layer]==1) {
@@ -632,21 +494,10 @@ public class BMTmonitor extends DetectorMonitor {
 				} else {
 					clusterSizeVsAngleHisto.setFillColor(8);
 				}
-				adcGroup.addDataSet(clusterSizeVsAngleHisto, 11);
-				
-				H1F occupancyVsAngleHisto = new H1F("Occupancy vs angle : Layer " + layer + " Sector " + sector,
-						"Occupancy vs angle : Layer " + layer + " Sector " + sector, 360, -180, 180);
-				occupancyVsAngleHisto.setTitleX("Angle (Layer " + layer + " Sector " + sector+")");
-				occupancyVsAngleHisto.setTitleY("Number of tracks");
-				if (isZ[layer]==1) {
-					occupancyVsAngleHisto.setFillColor(4);
-				} else {
-					occupancyVsAngleHisto.setFillColor(8);
-				}
-				adcGroup.addDataSet(occupancyVsAngleHisto, 8);
+				adcGroup.addDataSet(clusterSizeVsAngleHisto, 8);
 				
 				H1F maxAdcCentroidHisto = new H1F("MaxAdcOfCentroid : Layer " + layer + " Sector " + sector,
-						"MaxAdcOfCentroid : Layer " + layer + " Sector " + sector, 600, -1000, 5000.);
+						"MaxAdcOfCentroid : Layer " + layer + " Sector " + sector, 600, -1000,5000.);
 				maxAdcCentroidHisto.setTitleX("MaxAdcOfCentroid (Layer " + layer + " Sector " + sector + ")");
 				maxAdcCentroidHisto.setTitleY("Nb hits");
 				if (isZ[layer]==1) {
@@ -700,7 +551,6 @@ public class BMTmonitor extends DetectorMonitor {
 				}
 				occupancyGroup.addDataSet(occupancyReco, 7);
 				
->>>>>>> Monitoring-Expert/devel
 			}
 		}
 		
@@ -721,16 +571,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("Occupancies").setAxisLabelSize(12);
 		this.getDetectorCanvas().getCanvas("Occupancies").draw(this.getDataGroup().getItem(0, 0, 0).getH2F("Occupancies"));
 		this.getDetectorCanvas().getCanvas("Occupancies").update();
-<<<<<<< HEAD
-
-		this.getDetectorCanvas().getCanvas("TimeMax").divide(maxNumberSector, maxNumberLayer);
-		this.getDetectorCanvas().getCanvas("TimeMax").setGridX(false);
-		this.getDetectorCanvas().getCanvas("TimeMax").setGridY(false);
-		this.getDetectorCanvas().getCanvas("TimeMax").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("TimeMax").setAxisLabelSize(12);
-
-		this.getDetectorCanvas().getCanvas("Occupancy C").divide(maxNumberSector, maxNumberLayer/2);
-=======
 		
 		this.getDetectorCanvas().getCanvas("Occupancy").divide(numberOfSectors, numberOfLayers);
 		this.getDetectorCanvas().getCanvas("Occupancy").setGridX(false);
@@ -739,7 +579,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("Occupancy").setAxisLabelSize(12);
 		
 		this.getDetectorCanvas().getCanvas("Occupancy C").divide(numberOfSectors, numberOfLayers/2);
->>>>>>> Monitoring-Expert/devel
 		this.getDetectorCanvas().getCanvas("Occupancy C").setGridX(false);
 		this.getDetectorCanvas().getCanvas("Occupancy C").setGridY(false);
 		this.getDetectorCanvas().getCanvas("Occupancy C").setAxisTitleSize(12);
@@ -812,18 +651,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("TimeMax").setAxisTitleSize(12);
 		this.getDetectorCanvas().getCanvas("TimeMax").setAxisLabelSize(12);
 		
-		this.getDetectorCanvas().getCanvas("TimeMaxCut").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("TimeMaxCut").setGridX(false);
-		this.getDetectorCanvas().getCanvas("TimeMaxCut").setGridY(false);
-		this.getDetectorCanvas().getCanvas("TimeMaxCut").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("TimeMaxCut").setAxisLabelSize(12);
-		
-		this.getDetectorCanvas().getCanvas("TimeMaxNoFit").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("TimeMaxNoFit").setGridX(false);
-		this.getDetectorCanvas().getCanvas("TimeMaxNoFit").setGridY(false);
-		this.getDetectorCanvas().getCanvas("TimeMaxNoFit").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("TimeMaxNoFit").setAxisLabelSize(12);
-		
 		this.getDetectorCanvas().getCanvas("TimeMax vs Strip").divide(numberOfSectors, numberOfLayers);
 		this.getDetectorCanvas().getCanvas("TimeMax vs Strip").setGridX(false);
 		this.getDetectorCanvas().getCanvas("TimeMax vs Strip").setGridY(false);
@@ -861,12 +688,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("FToT per strip").setAxisTitleSize(12);
 		this.getDetectorCanvas().getCanvas("FToT per strip").setAxisLabelSize(12);
 		
-		this.getDetectorCanvas().getCanvas("OccupancyStrip").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("OccupancyStrip").setGridX(false);
-		this.getDetectorCanvas().getCanvas("OccupancyStrip").setGridY(false);
-		this.getDetectorCanvas().getCanvas("OccupancyStrip").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("OccupancyStrip").setAxisLabelSize(12);
-		
 		this.getDetectorCanvas().getCanvas("OccupancyClusters").divide(numberOfSectors, numberOfLayers);
 		this.getDetectorCanvas().getCanvas("OccupancyClusters").setGridX(false);
 		this.getDetectorCanvas().getCanvas("OccupancyClusters").setGridY(false);
@@ -878,17 +699,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("NbClusters vs Time").setGridY(false);
 		this.getDetectorCanvas().getCanvas("NbClusters vs Time").setAxisTitleSize(12);
 		this.getDetectorCanvas().getCanvas("NbClusters vs Time").setAxisLabelSize(12);
-		
-		this.getDetectorCanvas().getCanvas("Cluster Multiplicity").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("Cluster Multiplicity").setGridX(false);
-		this.getDetectorCanvas().getCanvas("Cluster Multiplicity").setGridY(false);
-		this.getDetectorCanvas().getCanvas("Cluster Multiplicity").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("Cluster Multiplicity").setAxisLabelSize(12);
-		for (int sector=1; sector<= numberOfSectors; sector++){
-			for (int layer=1; layer<= numberOfLayers; layer++){
-				this.getDetectorCanvas().getCanvas("Cluster Multiplicity").getPad(sector-1+(layer-1)*numberOfSectors).getAxisY().setLog(true);
-			}
-		}
 		
 		this.getDetectorCanvas().getCanvas("ClusterCharge").divide(numberOfSectors, numberOfLayers);
 		this.getDetectorCanvas().getCanvas("ClusterCharge").setGridX(false);
@@ -913,18 +723,6 @@ public class BMTmonitor extends DetectorMonitor {
 		this.getDetectorCanvas().getCanvas("ClusterSize per strip").setGridY(false);
 		this.getDetectorCanvas().getCanvas("ClusterSize per strip").setAxisTitleSize(12);
 		this.getDetectorCanvas().getCanvas("ClusterSize per strip").setAxisLabelSize(12);
-		
-		this.getDetectorCanvas().getCanvas("ClusterSize vs angle").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("ClusterSize vs angle").setGridX(false);
-		this.getDetectorCanvas().getCanvas("ClusterSize vs angle").setGridY(false);
-		this.getDetectorCanvas().getCanvas("ClusterSize vs angle").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("ClusterSize vs angle").setAxisLabelSize(12);
-		
-		this.getDetectorCanvas().getCanvas("Occupancy vs angle").divide(numberOfSectors, numberOfLayers);
-		this.getDetectorCanvas().getCanvas("Occupancy vs angle").setGridX(false);
-		this.getDetectorCanvas().getCanvas("Occupancy vs angle").setGridY(false);
-		this.getDetectorCanvas().getCanvas("Occupancy vs angle").setAxisTitleSize(12);
-		this.getDetectorCanvas().getCanvas("Occupancy vs angle").setAxisLabelSize(12);
 		
 		this.getDetectorCanvas().getCanvas("OccupancyReco").divide(numberOfSectors, numberOfLayers);
 		this.getDetectorCanvas().getCanvas("OccupancyReco").setGridX(false);
@@ -986,10 +784,7 @@ public class BMTmonitor extends DetectorMonitor {
 					this.getDetectorCanvas().getCanvas("Occupancy C").draw(
 						this.getDataGroup().getItem(0, 0, 0).getH1F("Hitmap : Layer " + layer + " Sector " + sector));
 				}
-<<<<<<< HEAD
-=======
 				
->>>>>>> Monitoring-Expert/devel
 				switch (layer) {
 				case 1: row=5; break;
 				case 2: row=2; break;
@@ -999,12 +794,6 @@ public class BMTmonitor extends DetectorMonitor {
 				case 6: row=3; break;
 				default:row=-1;break;
 				}
-<<<<<<< HEAD
-				this.getDetectorCanvas().getCanvas("TimeMax").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("TimeMax").draw(
-						this.getDataGroup().getItem(sector, layer, 1).getH1F("TimeOfMax : Layer " + layer + " Sector " + sector));
-
-=======
 //				this.getDetectorCanvas().getCanvas("Occupancies").cd(column + numberOfColumns * row);
 //				this.getDetectorCanvas().getCanvas("Occupancies").draw(
 //						this.getDataGroup().getItem(sector, layer, 0).getH1F("Hitmap : Layer " + layer + " Sector " + sector));
@@ -1045,14 +834,6 @@ public class BMTmonitor extends DetectorMonitor {
 				this.getDetectorCanvas().getCanvas("TimeMax").draw(
 						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax : Layer " + layer + " Sector " + sector));
 
-				this.getDetectorCanvas().getCanvas("TimeMaxCut").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("TimeMaxCut").draw(
-						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax cut : Layer " + layer + " Sector " + sector));
-				
-				this.getDetectorCanvas().getCanvas("TimeMaxNoFit").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("TimeMaxNoFit").draw(
-						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax no fit : Layer " + layer + " Sector " + sector));
-
 				this.getDetectorCanvas().getCanvas("TimeMax vs Strip").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("TimeMax vs Strip").draw(
 						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax vs Strip : Layer " + layer + " Sector " + sector));
@@ -1073,10 +854,6 @@ public class BMTmonitor extends DetectorMonitor {
 				this.getDetectorCanvas().getCanvas("FToT per strip").draw(
 						this.getDataGroup().getItem(0, 0, 2).getH1F("FToT per strip : Layer " + layer + " Sector " + sector));
 
-				this.getDetectorCanvas().getCanvas("OccupancyStrip").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("OccupancyStrip").draw(
-						this.getDataGroup().getItem(0, 0, 0).getH1F("OccupancyStrip : Layer " + layer + " Sector " + sector));
-				
 				this.getDetectorCanvas().getCanvas("OccupancyClusters").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("OccupancyClusters").draw(
 						this.getDataGroup().getItem(0, 0, 0).getH1F("HitmapClusters : Layer " + layer + " Sector " + sector));
@@ -1084,10 +861,6 @@ public class BMTmonitor extends DetectorMonitor {
 				this.getDetectorCanvas().getCanvas("NbClusters vs Time").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("NbClusters vs Time").draw(
 						this.getDataGroup().getItem(0, 0, 0).getH1F("NbClusters vs Time : Layer " + layer + " Sector " + sector));
-				
-				this.getDetectorCanvas().getCanvas("Cluster Multiplicity").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("Cluster Multiplicity").draw(
-						this.getDataGroup().getItem(0, 0, 0).getH1F("Cluster Multiplicity : Layer " + layer + " Sector " + sector));
 				
 				this.getDetectorCanvas().getCanvas("ClusterCharge").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("ClusterCharge").draw(
@@ -1104,14 +877,6 @@ public class BMTmonitor extends DetectorMonitor {
 				this.getDetectorCanvas().getCanvas("ClusterSize per strip").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("ClusterSize per strip").draw(
 						this.getDataGroup().getItem(0, 0, 1).getH1F("ClusterSize per strip : Layer " + layer + " Sector " + sector));
-
-				this.getDetectorCanvas().getCanvas("Occupancy vs angle").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("Occupancy vs angle").draw(
-						this.getDataGroup().getItem(0, 0, 1).getH1F("Occupancy vs angle : Layer " + layer + " Sector " + sector));
-
-				this.getDetectorCanvas().getCanvas("ClusterSize vs angle").cd(column + numberOfColumns * row);
-				this.getDetectorCanvas().getCanvas("ClusterSize vs angle").draw(
-						this.getDataGroup().getItem(0, 0, 1).getH1F("ClusterSize vs angle : Layer " + layer + " Sector " + sector));
 
 				this.getDetectorCanvas().getCanvas("OccupancyReco").cd(column + numberOfColumns * row);
 				this.getDetectorCanvas().getCanvas("OccupancyReco").draw(
@@ -1137,7 +902,6 @@ public class BMTmonitor extends DetectorMonitor {
 				this.getDetectorCanvas().getCanvas("TimeOfCentroid per strip").draw(
 						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfCentroid per strip : Layer " + layer + " Sector " + sector));
 				
->>>>>>> Monitoring-Expert/devel
 			}
 			this.getDetectorCanvas().getCanvas("Occupancies").update();
 			this.getDetectorCanvas().getCanvas("Occupancy").update();
@@ -1153,24 +917,18 @@ public class BMTmonitor extends DetectorMonitor {
 			this.getDetectorCanvas().getCanvas("IntegralPulse vs Strip").update();
 			
 			this.getDetectorCanvas().getCanvas("TimeMax").update();
-			this.getDetectorCanvas().getCanvas("TimeMaxCut").update();
-			this.getDetectorCanvas().getCanvas("TimeMaxNoFit").update();
 			this.getDetectorCanvas().getCanvas("TimeMax vs Strip").update();
 			this.getDetectorCanvas().getCanvas("ToT").update();
 			this.getDetectorCanvas().getCanvas("ToT per strip").update();
 			this.getDetectorCanvas().getCanvas("FToT").update();
 			this.getDetectorCanvas().getCanvas("FToT per strip").update();
 			
-			this.getDetectorCanvas().getCanvas("OccupancyStrip").update();
 			this.getDetectorCanvas().getCanvas("OccupancyClusters").update();
 			this.getDetectorCanvas().getCanvas("NbClusters vs Time").update();
-			this.getDetectorCanvas().getCanvas("Cluster Multiplicity").update();
 			this.getDetectorCanvas().getCanvas("ClusterCharge").update();
 			this.getDetectorCanvas().getCanvas("ClusterCharge per strip").update();
 			this.getDetectorCanvas().getCanvas("ClusterSize").update();
 			this.getDetectorCanvas().getCanvas("ClusterSize per strip").update();
-			this.getDetectorCanvas().getCanvas("ClusterSize vs angle").update();
-			this.getDetectorCanvas().getCanvas("Occupancy vs angle").update();
 			this.getDetectorCanvas().getCanvas("OccupancyReco").update();
 			this.getDetectorCanvas().getCanvas("Residuals").update();
 			this.getDetectorCanvas().getCanvas("MaxAdcOfCentroid").update();
@@ -1178,19 +936,6 @@ public class BMTmonitor extends DetectorMonitor {
 			this.getDetectorCanvas().getCanvas("TimeOfCentroid").update();
 			this.getDetectorCanvas().getCanvas("TimeOfCentroid per strip").update();
 		}
-<<<<<<< HEAD
-		this.getDetectorCanvas().getCanvas("Occupancy Z").update();
-		this.getDetectorCanvas().getCanvas("Occupancy C").update();
-		this.getDetectorCanvas().getCanvas("TimeMax").update();
-		
-		this.getDetectorCanvas().getCanvas("Multiplicity").divide(1, 1);
-		this.getDetectorCanvas().getCanvas("Multiplicity").setGridX(false);
-		this.getDetectorCanvas().getCanvas("Multiplicity").setGridY(false);
-		this.getDetectorCanvas().getCanvas("Multiplicity").cd(0);
-		this.getDetectorCanvas().getCanvas("Multiplicity").draw(this.getDataGroup().getItem(0,0,0).getH1F("multi"));
-		this.getDetectorCanvas().getCanvas("Multiplicity").update();
-=======
->>>>>>> Monitoring-Expert/devel
 	}
 	
 	public void updateHistoChanges() {
@@ -1362,42 +1107,6 @@ public class BMTmonitor extends DetectorMonitor {
 	 * Read 1 event and fill histograms 
 	 */
 	public void processEvent(DataEvent event) {
-<<<<<<< HEAD
-           
-		if (this.getNumberOfEvents() >= super.eventResetTime_current[0] && super.eventResetTime_current[0] > 0){
-		    resetEventListener();
-		}
-        
-		//if (!testTriggerMask()) return;
-            
-		if (event.hasBank("BMT::adc") == true) {
-			DataBank bank = event.getBank("BMT::adc");
-                        
-                        this.getDataGroup().getItem(0,0,0).getH1F("multi").fill(bank.rows());
-                        
-			for (int i = 0; i < bank.rows(); i++) {
-				int sector = bank.getByte("sector", i);
-				int layer = bank.getByte("layer", i);
-				int strip = bank.getShort("component", i);
-				float timeOfMax = bank.getFloat("time", i);
-                                
-				if (strip < 0 || !mask[sector][layer][strip]){
-					continue;
-				}
-				int dream=0;
-				int dreamLayer=0;
-				for (int layerNb=1; layerNb<layer; layerNb++){
-					dreamLayer = dreamLayer + maxNumberSector * numberDream[layerNb];
-				}
-				int dreamSector = (sector-1) * numberDream[layer];
-				int dreamTile = (strip-1) / numberOfStripsPerChip+1;
-				dream = dreamLayer + dreamSector + dreamTile;
-				hitNumberDream[dream]++;		
-				this.getDataGroup().getItem(sector, layer, 2).getH1F("Occupancy Layer " + layer + " Sector " + sector).fill(strip);
-				this.getDataGroup().getItem(0, 0, 0).getH2F("Occupancies").fill(strip,3*(layer-1)+(sector-1),1);
-				this.getDataGroup().getItem(sector, layer, 1).getH1F("TimeOfMax : Layer " + layer + " Sector " + sector).fill(timeOfMax);
-				this.getDetectorSummary().getH2F("summary").fill(strip,3*(layer-1)+(sector-1),1);
-=======
 		try {
 			
 			if (this.getNumberOfEvents() >= super.eventResetTime_current[0] && super.eventResetTime_current[0] > 0){
@@ -1407,11 +1116,7 @@ public class BMTmonitor extends DetectorMonitor {
 			if (!testTriggerMask()) return;
 			
 			count ++;
-			if (this.getNumberOfEvents()%1000==0){
-				System.out.println("");
-				System.out.println("BMT event: " + count + " / since last reset: "+ this.getNumberOfEvents());
-			}
-//			System.out.println("Event: " + count/*this.getNumberOfEvents()*/);
+			System.out.println("Event: " + count/*this.getNumberOfEvents()*/);
 			//		if (this.getNumberOfEvents()>=30000){
 			//			resetEventListener();
 			//		}
@@ -1419,9 +1124,9 @@ public class BMTmonitor extends DetectorMonitor {
 
 			
 			/* ===== RUN RECONSTRUCTION ===== */
-//			recoCo.setFieldsConfig("SOLENOID80TORUS30");
-//			recoCo.processDataEvent(event);
-//			System.out.println("Reconstruction done ");
+			//recoCo.setFieldsConfig("SOLENOID80TORUS30");
+			//recoCo.processDataEvent(event);
+			//System.out.println("Reconstruction done ");
 
 			//event.show();
 		
@@ -1432,11 +1137,10 @@ public class BMTmonitor extends DetectorMonitor {
 //			}
 			
 			int multiplicity[][] = new int[numberOfSectors + 1][numberOfLayers + 1];
-			Event currentEvent = new Event();
 			
 			if (event.hasBank("BMT::adc") == true) {
 				DataBank bank = event.getBank("BMT::adc");
-				//bank.show();
+//				bank.show();
 				this.getDataGroup().getItem(0, 0, 0).getH1F("hitMultiplicity").fill(bank.rows(),1);
 
 				//if (bank.rows()>4){ //CUT
@@ -1453,7 +1157,7 @@ public class BMTmonitor extends DetectorMonitor {
 					long timestamp = bank.getLong("timestamp",i);
 
 					for (int j = 0; j < numberOfSamples; j++) {
-						adcOfPulse[j]=/*0;//*/bank.getInt("bin"+j,i);
+						adcOfPulse[j]=/*0;*/bank.getInt("bin"+j,i);
 						//pulseHistoBMT.setBinContent(j,adcOfPulse[j]);
 						//System.out.println("  bin : "+j+"  adc : "+adcOfPulse[j]);
 					}
@@ -1463,11 +1167,6 @@ public class BMTmonitor extends DetectorMonitor {
 						 continue;
 					 }
 
-					/* ===== FILL EVENT =====*/
-					 
-					Hit currentHit = new Hit(i, sector,layer,component);
-					currentEvent.addHits(currentHit);
-					 
 					/* ===== APPLY CUTS ===== */
 
 					if ((!mask[sector][layer][component])/*||(timeOfMax < 80)||(timeOfMax > 160)*/){
@@ -1495,7 +1194,7 @@ public class BMTmonitor extends DetectorMonitor {
 					this.getDataGroup().getItem(0, 0, 0).getH1F("Hitmap : Layer " + layer + " Sector " + sector).fill(component, 1);
 					this.getDataGroup().getItem(0, 0, 0).getH2F("Occupancies").fill(component,3*(layer-1)+(sector-1),1);
 					//System.out.println("Sector: "+sector+" Layer: "+layer+" Component: "+component);
-					
+
 					int eventBin = this.getNumberOfEvents()/ratePlotScale;
 					this.getDataGroup().getItem(0, 0, 0).getH1F("NbHits vs Time : Layer " + layer + " Sector " + sector).fill(eventBin);
 					int numberOfBins=100;
@@ -1546,15 +1245,10 @@ public class BMTmonitor extends DetectorMonitor {
 //						//pulseHistoBMT.setBinContent(j,adcOfPulse[j]);
 //						//System.out.println("  bin : "+j+"  adc : "+adcOfPulse[j]);
 //					}
-					
-					if (timeOfMax < samplingTime || timeOfMax > samplingTime*(numberOfSamples*(1+sparseReading)-1-1)){
-						
-					}else{
-						this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax cut : Layer " + layer + " Sector " + sector).fill(timeOfMax);		
-					}
+					//System.out.println("Time Of Max before: "+timeOfMax);
+					timeOfMax = (float) (timeOfMax + 40 * Math.floor(timeOfMax/40));
+					//System.out.println("Time of Max after: "+timeOfMax);
 					this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax : Layer " + layer + " Sector " + sector).fill(timeOfMax);
-					this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax no fit : Layer " + layer + " Sector " + sector).fill(Math.round( timeOfMax/samplingTime )*samplingTime);		
-					
 					double timeOldAvg = this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax vs Strip : Layer " + layer + " Sector " + sector).getBinContent(component);
 					this.getDataGroup().getItem(0, 0, 2).getH1F("TimeOfMax vs Strip : Layer " + layer + " Sector " + sector).setBinContent(component, timeOldAvg + (timeOfMax-timeOldAvg)/numberOfHitsPerStrip[sector][layer][component]);
 					//System.out.println("Sector: "+sector+" Layer: "+layer+" Component: "+component+ "TimeOfMax: "+timeOfMax);
@@ -1596,6 +1290,7 @@ public class BMTmonitor extends DetectorMonitor {
 						hit[j+3]=adcOfPulse[j];
 					}
 					this.pulseViewer.add(hit);
+					//this.pulseViewer.hitList.add(hit);
 
 				} /* End of hits loop */
 				
@@ -1616,77 +1311,6 @@ public class BMTmonitor extends DetectorMonitor {
 
 			} /* End of if event has BMT::adc bank loop */
 
-			currentEvent.clustering();
-			
-			/* ===== FILL SMTHG ===== */
-			
-			for (int sector = 1; sector <= numberOfSectors; sector++) {
-				for (int layer = 1; layer <= numberOfLayers; layer++) {
-					this.getDataGroup().getItem(0, 0, 0).getH1F("Cluster Multiplicity : Layer " + layer + " Sector " + sector).fill(currentEvent.getClusterNumber(sector, layer));
-				}
-			}
-//			if (this.getNumberOfEvents()%5000==1 && this.getNumberOfEvents()>1000){
-//				for (int sector = 1; sector <= numberOfSectors; sector++) {
-//					for (int layer = 1; layer <= numberOfLayers; layer++) {
-//						double clustMultiplicity = this.getDataGroup().getItem(0, 0, 0).getH1F("Cluster Multiplicity : Layer " + layer + " Sector " + sector).getMean();
-//						System.out.println("BMT multiplicity sector "+sector+" layer "+layer+" : "+clustMultiplicity);
-//					}
-//				}
-//				for (int sector = 1; sector <= numberOfSectors; sector++) {
-//					for (int layer = 1; layer <= numberOfLayers; layer++) {
-//						double clustMultiplicity = this.getDataGroup().getItem(0, 0, 0).getH1F("Cluster Multiplicity : Layer " + layer + " Sector " + sector).getMean();
-//						System.out.println(clustMultiplicity);
-//					}
-//				}
-//			}
-//			System.out.println("Count: "+count);
-			if (this.getNumberOfEvents()%100 == 1){
-//				System.out.println("*** BMT");
-				double mean=0; int numberOfPoints=0; double occupancySumTot=0;
-				for (int layer = 1; layer <= numberOfLayers; layer++) {
-					double meanLayer=0; int numberOfPointsLayer=0; double occupancySum=0;
-					for (int sector = 1; sector <= numberOfSectors; sector++) {
-						for (int component = 1; component <= numberOfStrips[layer]; component++){
-							if ( ! ( (sector == 3 && layer == 5) || (sector == 1 && layer == 5) ) ){
-								double OccupancyNew = this.getDataGroup().getItem(0, 0, 0).getH1F("Hitmap : Layer " + layer + " Sector " + sector).getBinContent(component);
-								//							System.out.println("Occupancy : "+OccupancyNew);
-								//							System.out.println("Average : "+OccupancyNew/count);
-								this.getDataGroup().getItem(0, 0, 0).getH1F("OccupancyStrip : Layer " + layer + " Sector " + sector).setBinContent(component, 100*OccupancyNew/count);
-								//							this.getDataGroup().getItem(0, 0, 0).getH1F("OccupancyStrip : Layer " + layer + " Sector " + sector).setBinContent(component, OccupancyOldAvg + (1-OccupancyOldAvg)/numberOfHitsPerStrip[sector][layer][component]);
-								
-								mean += 100*OccupancyNew/count;
-								numberOfPoints++;
-								meanLayer += 100*OccupancyNew/count;
-								numberOfPointsLayer++;
-//								System.out.println("Sector: "+sector+" Layer: "+layer+" Component: "+component+" hitNumber: "+OccupancyNew+" numberOfEvents: "+count+" Occupancy(%): "+(100*OccupancyNew/count));
-								occupancySum += OccupancyNew;
-								occupancySumTot += OccupancyNew;
-							}
-						}
-					}
-//					System.out.println("Occupancy BMT average layer "+layer+" : ");
-//					System.out.println(meanLayer/numberOfPointsLayer);
-////					System.out.println("Number of hits: "+occupancySum);
-////					System.out.println(" / nb strips * nb events: "+(numberOfPointsLayer*count));
-//					System.out.println(occupancySum);
-//					System.out.println((numberOfPointsLayer*count));
-//					System.out.println("");
-////					System.out.println("Ratio: "+occupancySum/(numberOfPointsLayer*count));
-				}
-//				System.out.println("Occupancy BMT average total : ");
-//				System.out.println(mean/numberOfPoints);
-//				
-////				System.out.println("Number of hits: "+occupancySumTot);
-////				System.out.println(" / nb strips * nb events: "+(numberOfPoints*count));
-//				System.out.println(occupancySumTot);
-//				System.out.println((numberOfPoints*count));
-//				
-////				System.out.println("Ratio: "+occupancySumTot/(numberOfPoints*count));
-//				
-//				System.out.println("");
-//				System.out.println("");
-			}
-			
 			/* ===== READ RECONSTRUCTED BANK ===== */
 
 			if (event.hasBank("BMTRec::Clusters") == true) {
@@ -1951,7 +1575,6 @@ public class BMTmonitor extends DetectorMonitor {
 									int clusterTrkID = bankClusters.getShort("trkID" ,clusterNb);
 									int clusterSector = bankClusters.getByte("sector", clusterNb);
 									int clusterLayer = bankClusters.getByte("layer", clusterNb);
-									short clusterSize = bankClusters.getShort("size" ,clusterNb);
 									//System.out.println("Cluster:  trackID:"+clusterTrkID+"  sector: "+clusterSector+"  layer:"+clusterLayer);
 									if ((clusterTrkID!=trackID)||(clusterSector!=sector)||(clusterLayer!=layer)){
 										continue;
@@ -1961,6 +1584,7 @@ public class BMTmonitor extends DetectorMonitor {
 									foundTrackLayer[layer]=true;
 									foundTrackTile[sector][layer]=true;
 									gotCluster = true;
+									
 								}
 							} /* End of if event has BMTRec::Clusters bank loop */
 //							if (foundTrackLayer[layer]){
@@ -1994,8 +1618,8 @@ public class BMTmonitor extends DetectorMonitor {
 							efficiencyTrackLayerNb[layerI]++;
 //							System.out.println("NO cluster found");
 						}
-						if (count%10000==1){
-//							System.out.println("Efficiency layer "+layerI+" : "+efficiencyTrackLayer[layerI]+"   ("+(efficiencyTrackLayer[layerI]*efficiencyTrackLayerNb[layerI])+"/"+efficiencyTrackLayerNb[layerI]+")");
+						if (count%1000==1){
+							System.out.println("Efficiency layer "+layerI+" : "+efficiencyTrackLayer[layerI]+"   ("+(efficiencyTrackLayer[layerI]*efficiencyTrackLayerNb[layerI])+"/"+efficiencyTrackLayerNb[layerI]+")");
 						}
 						for (int sectorI = 1; sectorI <= numberOfSectors; sectorI++) {
 							if (expectedTrackTile[sectorI][layerI] && foundTrackTile[sectorI][layerI] /*&& gotCluster*/){
@@ -2008,10 +1632,12 @@ public class BMTmonitor extends DetectorMonitor {
 //								System.out.println("NO cluster found tile");
 							}
 							if (count%1000==1){
-//								System.out.println("Efficiency layer "+layerI+" sector "+sectorI+" : "+efficiencyTrackTile[sectorI][layerI]+"   ("+(efficiencyTrackTile[sectorI][layerI]*efficiencyTrackTileNb[sectorI][layerI])+"/"+efficiencyTrackTileNb[sectorI][layerI]+")");
+								System.out.println("Efficiency layer "+layerI+" sector "+sectorI+" : "+efficiencyTrackTile[sectorI][layerI]+"   ("+(efficiencyTrackTile[sectorI][layerI]*efficiencyTrackTileNb[sectorI][layerI])+"/"+efficiencyTrackTileNb[sectorI][layerI]+")");
 							}
 						}
 					}
+					
+					
 					
 				}
 			} /* End of if event has CVTRec::Tracks bank loop */
@@ -2048,121 +1674,10 @@ public class BMTmonitor extends DetectorMonitor {
 //				bankTrajectory.show();
 //			}
 			
-			if (event.hasBank("CVTRec::Tracks") == true) {			
-				DataBank bankTracks = event.getBank("CVTRec::Tracks");
-//				bankTracks.show();
-				
-				for (int trackNb = 0; trackNb < bankTracks.rows(); trackNb++) { /* For all tracks */
-					int trackID=bankTracks.getShort("ID", trackNb);
-					int trackCharge=bankTracks.getByte("q", trackNb);
-//					double ptot = bankTracks.getFloat("p", trackNb);
-//					double pt = bankTracks.getFloat("pt", trackNb);
-//					double tandip = bankTracks.getFloat("tandip", trackNb);
-					
-//					double pz = Math.sqrt(ptot*ptot-pt*pt);
-//					double theta = Math.toDegrees(Math.acos(tandip*pt));
-					
-					if (trackCharge>0){
-						continue;
-					}
-					
-					
-					
-					if (event.hasBank("CVTRec::Trajectory") == true) {
-						DataBank bankTrajectory = event.getBank("CVTRec::Trajectory");
-//						bankTrajectory.show();
-						for (int hitExpNb = 0; hitExpNb < bankTrajectory.rows(); hitExpNb++) { /* For all hits */
-//							
-							int ID = /*(hitExpNb/12+1); //*/bankTrajectory.getInt("ID", hitExpNb);
-							int globalLayer = /*(hitExpNb%12 +1); //*/bankTrajectory.getByte("LayerTrackIntersPlane", hitExpNb);
-							int sector = bankTrajectory.getByte("SectorTrackIntersPlane", hitExpNb);
-							float xTrack = bankTrajectory.getFloat("XtrackIntersPlane", hitExpNb);
-							float yTrack = bankTrajectory.getFloat("YtrackIntersPlane", hitExpNb);
-							float zTrack = bankTrajectory.getFloat("ZtrackIntersPlane", hitExpNb);
-							float phiTrack = bankTrajectory.getFloat("PhiTrackIntersPlane",hitExpNb);
-							float thetaTrack = bankTrajectory.getFloat("ThetaTrackIntersPlane",hitExpNb);
-							float trackAngle = bankTrajectory.getFloat("trkToMPlnAngl",hitExpNb);
-							float expectedCentroid = bankTrajectory.getFloat("CalcCentroidStrip",hitExpNb);
-//							System.out.println("HIT     ID: "+ID+"  globalLayer:"+globalLayer+"  sector:"+sector+"  x:"+xTrack+"  y:"+yTrack+"  z:"+zTrack);
-							if ( globalLayer <= 6 ) {
-								continue;
-							}
-							if ( (Float.isNaN(xTrack)||Float.isNaN(yTrack)||Float.isNaN(zTrack)) || (xTrack==0&&yTrack==0&&zTrack==0) ) {
-//								System.out.println("Not acceptable hit (Bad coordinates)");
-								continue;
-							}
-							
-//							double theta = Math.toDegrees(Math.acos(zTrack/Math.sqrt(xTrack*xTrack+yTrack*yTrack+zTrack*zTrack)));
-//							
-//							if (theta<70 || theta>110){
-//								continue;
-//							}
-							
-							
-							
-							int layer=globalLayer-6;
-							double phiPos=Math.atan(yTrack/xTrack);
-							if (xTrack<0){
-								phiPos = Math.PI+Math.atan(yTrack/xTrack);
-							}else if (yTrack<0){
-								phiPos = 2*Math.PI+Math.atan(yTrack/xTrack);
-							}
-							
-							if (event.hasBank("BMTRec::Clusters") == true) {
-								DataBank bankClusters = event.getBank("BMTRec::Clusters");
-//								bankClusters.show();
-								for (int clusterNb = 0; clusterNb < bankClusters.rows(); clusterNb++) {
-									int clusterTrkID = bankClusters.getShort("trkID" ,clusterNb);
-									int clusterSector = bankClusters.getByte("sector", clusterNb);
-									int clusterLayer = bankClusters.getByte("layer", clusterNb);
-									short clusterSize = bankClusters.getShort("size" ,clusterNb);
-									
-									if ((clusterTrkID!=trackID)||(clusterSector!=sector)||(clusterLayer!=layer)){
-										continue;
-									}
-									
-									int thetaTrackDegree=0;
-									if (isZ[layer]==1){
-										thetaTrackDegree = (int) Math.round( Math.toDegrees(phiTrack) );
-										
-									}else{
-										thetaTrackDegree = (int) Math.round( Math.toDegrees(thetaTrack) );
-										if (thetaTrack>80){
-											//System.out.println("Phi > 80");
-										}
-									}
-									
-									//System.out.println("sector: "+clusterSector+"  layer: "+clusterLayer+"  phiTrack: "+thetaTrackDegree+"  clusterSize: "+clusterSize);
-									
-									
-									int bin = this.getDataGroup().getItem(0, 0, 1).getH1F("ClusterSize vs angle : Layer " + clusterLayer + " Sector " + clusterSector).getxAxis().getBin(thetaTrackDegree);
-									
-									double clusterSizeOldAvg = this.getDataGroup().getItem(0, 0, 1).getH1F("ClusterSize vs angle : Layer " + clusterLayer + " Sector " + clusterSector).getBinContent(bin);
-									double numberOfTracksOld = this.getDataGroup().getItem(0, 0, 1).getH1F("Occupancy vs angle : Layer " + clusterLayer + " Sector " + clusterSector).getBinContent(bin);
-									double numberOfTracksNew = numberOfTracksOld+1;
-									this.getDataGroup().getItem(0, 0, 1).getH1F("Occupancy vs angle : Layer " + clusterLayer + " Sector " + clusterSector).setBinContent(bin,numberOfTracksNew);
-									//System.out.println("sector: "+clusterSector+"  layer: "+clusterLayer+"clusterSizeOldAvg: "+clusterSizeOldAvg+"  numberOfTracksNew: "+numberOfTracksNew+" bin: "+bin+" new avg: "+((clusterSizeOldAvg*(numberOfTracksNew-1)+clusterSize)/numberOfTracksNew));
-									this.getDataGroup().getItem(0, 0, 1).getH1F("ClusterSize vs angle : Layer " + clusterLayer + " Sector " + clusterSector).setBinContent(bin, ((clusterSizeOldAvg*(numberOfTracksNew-1)+clusterSize)/numberOfTracksNew));
-									
-								}
-							}
-						}
-					}
-				}
->>>>>>> Monitoring-Expert/devel
-			}
-			
-			
-			
 		} catch (Exception e){
 			e.printStackTrace();
 		}
-<<<<<<< HEAD
-		//System.out.println("Event Done: "+this.getNumberOfEvents());
-=======
 
-//		System.out.println("BMT Analysis Done Event: " + count/*this.getNumberOfEvents()*/);
->>>>>>> Monitoring-Expert/devel
+		System.out.println("BMT Analysis Done Event: " + count/*this.getNumberOfEvents()*/);
 	}
-	
 }

@@ -68,34 +68,19 @@ import org.jlab.elog.LogEntry;
 
 public class EventViewer implements IDataEventListener, DetectorListener, ActionListener, ChangeListener {
     
-    List<DetectorPane2D> DetectorPanels     = new ArrayList<DetectorPane2D>();
-    JTabbedPane tabbedpane           	    = null;
-    JPanel mainPanel 			    = null;
+    List<DetectorPane2D> DetectorPanels   	= new ArrayList<DetectorPane2D>();
+    JTabbedPane tabbedpane           		= null;
+    JPanel mainPanel 				        = null;
     JMenuBar menuBar                        = null;
-<<<<<<< HEAD
-    JTextPane clas12Textinfo                = new JTextPane();
-    DataSourceProcessorPane processorPane   = null;
-    EmbeddedCanvasTabbed CLAS12Canvas       = null;
-    //EmbeddedCanvasTabbed CLAS12CDCanvas         = null;
-    
-    CLASDecoder                clasDecoder = new CLASDecoder();
-           
-    private int canvasUpdateTime   = 2000;
-    private int analysisUpdateTime = 100;
-    private int runNumber     = 2284;
-    private int ccdbRunNumber = 0;
-    
-    public String outPath = "/home/clasrun/CLAS12MON";
-=======
     DataSourceProcessorPane processorPane 	= null;
     JTextPane clas12Textinfo                = new JTextPane();
     EmbeddedCanvasTabbed CLAS12Canvas       = null;
     //EmbeddedCanvasTabbed CLAS12CDCanvas         = null;
     
     /* MVT PULSE DISPLAY */
-    MVTpulseViewer pulseWindowBMT = new MVTpulseViewer("BMT", 6, 1);
-    MVTpulseViewer pulseWindowFMT = new MVTpulseViewer("FMT", 6, 1);
-    MVTpulseViewer pulseWindowFTT = new MVTpulseViewer("FTT", 10, 0);
+    MVTpulseViewer pulseWindowBMT = new MVTpulseViewer("BMT");
+    MVTpulseViewer pulseWindowFMT = new MVTpulseViewer("FMT");
+    MVTpulseViewer pulseWindowFTT = new MVTpulseViewer("FTT");
     /* MVT PULSE DISPLAY */
     
     //CodaEventDecoder               decoder = new CodaEventDecoder();
@@ -107,7 +92,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
     private int runNumber  = 2284;
     private int ccdbRunNumber = 0;
     
->>>>>>> Monitoring-Expert/devel
     
     // detector monitors
     DetectorMonitor[] monitors = {
@@ -181,13 +165,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         menuItem.getAccessibleContext().setAccessibleDescription("Set global z-axis lin scale");
         menuItem.addActionListener(this);
         settings.add(menuItem);
-<<<<<<< HEAD
-        menuItem = new JMenuItem("Set DC occupancy scale max");
-        menuItem.getAccessibleContext().setAccessibleDescription("Set DC occupancy scale max");
-        menuItem.addActionListener(this);
-        settings.add(menuItem);
-=======
->>>>>>> Monitoring-Expert/devel
         menuItem = new JMenuItem("Set run number");
         menuItem.getAccessibleContext().setAccessibleDescription("Set run number");
         menuItem.addActionListener(this);
@@ -361,23 +338,13 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         menuBar.add(trigBits);
         
         String TriggerDef[] = { "Electron",
-		        "Electron S1","Electron S2","Electron S3","Electron S4","Electron S5","Electron S6",
-		        "ElectronOR noDC>300","PCALxECAL>10","","","","","","","","","","",
-		        "FTOFxPCALxECAL(1-4)","FTOFxPCALxECAL(2-5)","FTOFxPCALxECAL(3-6)","","",
-		        "FTxHDxFTOFxPCALxCTOF",
-		        "FTxHDx(FTOFxPCAL)^2","FTxHD>100","FT>100","","","",
-		        "1K Pulser"};
-/*        
-        String TriggerDef[] = { "Electron",
-		        "Electron S1","Electron S2","Electron S3","Electron S4","Electron S5","Electron S6",
-		        "HTCC(>1pe)","HTCCxPCAL(>300MeV)","FTOFxPCAL^3","FTOFxPCALxECAL^3",
-		        "FTOFxPCALxCTOF","FTOFxPCALxCND","FTOFxPCALxCNDxCTOF","FTOFxPCAL^2",
-		        "FTOFxPCALxECAL^2","FTOFxPCAL(1-4)","FTOFxPCAL(2-5)","FTOFxPCAL(3-6)",
-		        "FTOFxPCALxECAL(1-4)","FTOFxPCALxECAL(2-5)","FTOFxPCALxECAL(3-6)",
-		        "FTxFTOFxPCALxCTOF","FTxFTOFxPCALxCND","FTxFTOFxPCALxCTOFxCND",
-		        "FTx(FTOFxPCAL)^2","FTx(FTOFxPCAL)^3","FT(>300)xHODO","FT(>500)xHODO","FT>300","FT>500",
-		        "1K Pulser"};  
-*/        		             
+        		        "Electron S1","Electron S2","Electron S3","Electron S4","Electron S5","Electron S6",
+        		        "HTCC S1","HTCC S2","HTCC S3","HTCC S4","HTCC S5","HTCC S6",
+        		        "PCAL S1","PCAL S2","PCAL S3","PCAL S4","PCAL S5","PCAL S6",
+        		        "ECAL S1","ECAL S2","ECAL S3","ECAL S4","ECAL S5","ECAL S6",
+        		        "Unused","Unused","Unused","Unused","Unused","Unused",
+        		        "1K Pulser"};
+        		             
         JMenu trigBitsBeam = new JMenu("TriggerBits");
         trigBitsBeam.getAccessibleContext().setAccessibleDescription("Test Trigger Bits");
         
@@ -389,13 +356,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                 public void itemStateChanged(ItemEvent e) {
                 	
                     if(e.getStateChange() == ItemEvent.SELECTED) {
-<<<<<<< HEAD
-                        for(int k=0; k<monitors.length; k++) {
-                      	monitors[k].setTriggerMask(bit);
-                        }
-                    } else {
-                        for(int k=0; k<monitors.length; k++) {
-=======
                         //for(int k=0; k<19; k++) {
                         for(int k=0; k<3; k++) {
                       	monitors[k].setTriggerMask(bit);
@@ -403,7 +363,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     } else {
 //                        for(int k=0; k<19; k++) {
                         for(int k=0; k<3; k++) {
->>>>>>> Monitoring-Expert/devel
                      	monitors[k].clearTriggerMask(bit);
                         }
                     };
@@ -454,19 +413,12 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         splitPanel.setRightComponent(CLAS12Canvas);
         JTextPane clas12Text   = new JTextPane();
         clas12Text.setText("CLAS12\n monitoring plots\n V2.0\n");
-<<<<<<< HEAD
-        clas12Text.setEditable(false);       
-        this.clas12Textinfo.setEditable(false);
-        this.clas12Textinfo.setFont(new Font("Avenir",Font.PLAIN,16));
-        this.clas12Textinfo.setBackground(CLAS12View.getBackground());
-=======
 //        clas12Text.setEditable(false);
 //        JTextPane clas12Textinfo  = new JTextPane();
 //        clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
 //        clas12Textinfo.setEditable(false);
         clas12Text.setEditable(false);       
         this.clas12Textinfo.setEditable(false);
->>>>>>> Monitoring-Expert/devel
         StyledDocument styledDoc = clas12Text.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -517,21 +469,11 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         if(e.getActionCommand()=="Set global z-axis lin scale") {
            for(int k=0; k<this.monitors.length; k++) {this.monitors[k].setLogZ(false);this.monitors[k].plotHistos();}
         }
-<<<<<<< HEAD
-        if(e.getActionCommand()=="Set DC occupancy scale max") {
-           setDCRange(e.getActionCommand());
-        }
-        if(e.getActionCommand()=="Set run number") {
-           setRunNumber(e.getActionCommand());
-        }
-
-=======
         
         if(e.getActionCommand()=="Set run number") {
         	setRunNumber(e.getActionCommand());
         }
         
->>>>>>> Monitoring-Expert/devel
         if(e.getActionCommand()=="Open histograms file") {
             String fileName = null;
             JFileChooser fc = new JFileChooser();
@@ -568,8 +510,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         if(e.getActionCommand()=="Upload all histos to the logbook") {   
             
             DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
-            String tstamp = df.format(new Date());
-            String data = outPath + "/output" + "/clas12mon_" + this.runNumber + "_" + tstamp;        
+            String data = System.getProperty("user.dir") + "/output" + "/clas12mon_" + this.runNumber + "_" + df.format(new Date());        
             File theDir = new File(data);
             // if the directory does not exist, create it
             if (!theDir.exists()) {
@@ -579,126 +520,110 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                 if(result){ System.out.println("Created directory: " + data);}
             }
             
-            String fileName1 = data + "/summary_FD_"+tstamp+".png";
+            String fileName1 = data + "/summary_FD.png";
             System.out.println(fileName1);
             CLAS12Canvas.getCanvas("FD").save(fileName1);
-            String fileName2 = data + "/summary_CD_"+tstamp+".png";
+            String fileName2 = data + "/summary_CD.png";
             System.out.println(fileName2);
             CLAS12Canvas.getCanvas("CD").save(fileName2);
-            String fileName3 = data + "/summary_FT_"+tstamp+".png";
+            String fileName3 = data + "/summary_FT.png";
             System.out.println(fileName3);
             CLAS12Canvas.getCanvas("FT").save(fileName3);
             
             for(int k=0; k<this.monitors.length; k++) {
-                this.monitors[k].printCanvas(data,tstamp);
+                this.monitors[k].printCanvas(data);
             }
             
-            LogEntry entry = new LogEntry("All online monitoring histograms for run number " + this.runNumber, "HBLOG");
+            LogEntry entry = new LogEntry("All online monitoring histograms for run number " + this.runNumber, "TLOG");  // change to HBLOG
             
             System.out.println("Starting to upload all monitoring plots");
             
             try{
-              entry.addAttachment(data+"/summary_FD_"+tstamp+".png", "Summary plots FD");
-              entry.addAttachment(data+"/summary_CD_"+tstamp+".png", "Summary plots CD");
-              entry.addAttachment(data+"/summary_FT_"+tstamp+".png", "Summary plots FT");
+              entry.addAttachment(data+"/summary_FD.png", "Summary plots FD");
+              entry.addAttachment(data+"/summary_CD.png", "Summary plots CD");
+              entry.addAttachment(data+"/summary_FT.png", "Summary plots FT");
               System.out.println("Summary plots uploaded");
-              entry.addAttachment(data+"/BMT_canvas0_"+tstamp+".png", "BMT occupancies");
-              entry.addAttachment(data+"/BMT_canvas1_"+tstamp+".png", "BMT occupancies c");
-              entry.addAttachment(data+"/BMT_canvas2_"+tstamp+".png", "BMT occupancies z");
-              entry.addAttachment(data+"/BMT_canvas3_"+tstamp+".png", "BMT time of max");
-              entry.addAttachment(data+"/BMT_canvas4_"+tstamp+".png", "BMT multiplicity");
+              entry.addAttachment(data+"/BMT_canvas0.png", "BMT occupancies");
+              entry.addAttachment(data+"/BMT_canvas1.png", "BMT occupancies c");
+              entry.addAttachment(data+"/BMT_canvas2.png", "BMT occupancies z");
+              entry.addAttachment(data+"/BMT_canvas3.png", "BMT time of max");
+              entry.addAttachment(data+"/BMT_canvas4.png", "BMT multiplicity");
               System.out.println("BMT plots uploaded");
-              entry.addAttachment(data+"/BST_canvas0_"+tstamp+".png", "BST occupancies 2D");
-              entry.addAttachment(data+"/BST_canvas1_"+tstamp+".png", "BST occupancies 1D");
-              entry.addAttachment(data+"/BST_canvas2_"+tstamp+".png", "BST multiplicity"); 
+              entry.addAttachment(data+"/BST_canvas0.png", "BST occupancies 2D");
+              entry.addAttachment(data+"/BST_canvas1.png", "BST occupancies 1D");
+              entry.addAttachment(data+"/BST_canvas2.png", "BST multiplicity"); 
               System.out.println("BST plots uploaded");
-              entry.addAttachment(data+"/CND_canvas0_"+tstamp+".png", "CND ADC occupancies and spectra");
-              entry.addAttachment(data+"/CND_canvas1_"+tstamp+".png", "CND TDC occupancies and spectra");
+              entry.addAttachment(data+"/CND_canvas0.png", "CND ADC occupancies");
+              entry.addAttachment(data+"/CND_canvas1.png", "CND TDC occupancies");
               System.out.println("CND plots uploaded");
-              entry.addAttachment(data+"/CTOF_canvas0_"+tstamp+".png", "CTOF ADC occupancies and spectra");
-              entry.addAttachment(data+"/CTOF_canvas1_"+tstamp+".png", "CTOF TDC occupancies and spectra");
+              entry.addAttachment(data+"/CTOF_canvas0.png", "CTOF ADC occupancies");
+              entry.addAttachment(data+"/CTOF_canvas1.png", "CTOF TDC occupancies");
               System.out.println("CTOF plots uploaded");
-              entry.addAttachment(data+"/DC_canvas0_"+tstamp+".png", "DC occupancies raw");
-              entry.addAttachment(data+"/DC_canvas1_"+tstamp+".png", "DC occupancies normalized logarithmic scale");
-              entry.addAttachment(data+"/DC_canvas2_"+tstamp+".png", "DC occupancies normalized linear scale");
-              entry.addAttachment(data+"/DC_canvas3_"+tstamp+".png", "DC region occupancies");
-              entry.addAttachment(data+"/DC_canvas4_"+tstamp+".png", "DC TDC raw value versus layer");
-              entry.addAttachment(data+"/DC_canvas5_"+tstamp+".png", "DC TDC spectra per Sector / Superlayer");
-              entry.addAttachment(data+"/DC_canvas6_"+tstamp+".png", "DC hit multiplicity");
+              entry.addAttachment(data+"/DC_canvas0.png", "DC occupancies raw");
+              entry.addAttachment(data+"/DC_canvas1.png", "DC occupancies normalized");
+              entry.addAttachment(data+"/DC_canvas2.png", "DC hit multiplicity");
               System.out.println("DC plots uploaded");
-              entry.addAttachment(data+"/ECAL_canvas0_"+tstamp+".png", "ECAL ADC occupancies");
-              entry.addAttachment(data+"/ECAL_canvas1_"+tstamp+".png", "ECAL TDC occupancies");
-              entry.addAttachment(data+"/ECAL_canvas2_"+tstamp+".png", "ECAL ADC histograms");
-              entry.addAttachment(data+"/ECAL_canvas3_"+tstamp+".png", "ECAL FADC timing");
-              entry.addAttachment(data+"/ECAL_canvas4_"+tstamp+".png", "ECAL TDC histograms");
-              entry.addAttachment(data+"/ECAL_canvas5_"+tstamp+".png", "ECAL ADC sum");
+              entry.addAttachment(data+"/ECAL_canvas0.png", "ECAL ADC occupancies");
+              entry.addAttachment(data+"/ECAL_canvas1.png", "ECAL TDC occupancies");
+              entry.addAttachment(data+"/ECAL_canvas2.png", "ECAL ADC histograms");
+              entry.addAttachment(data+"/ECAL_canvas3.png", "ECAL TDC histograms");
+              entry.addAttachment(data+"/ECAL_canvas4.png", "ECAL ADC sum");
               System.out.println("ECAL plots uploaded");
-              //entry.addAttachment(data+"/Faraday Cup_canvas0_"+tstamp+".png", "Faraday Cup");
-              //System.out.println("Farady Cup plots uploaded");
-              entry.addAttachment(data+"/FMT_canvas0_"+tstamp+".png", "FMT occupancies 2D");
-              entry.addAttachment(data+"/FMT_canvas1_"+tstamp+".png", "FMT Time of Max");
-              entry.addAttachment(data+"/FMT_canvas2_"+tstamp+".png", "FMT occupancies 1D");
-              entry.addAttachment(data+"/FMT_canvas3_"+tstamp+".png", "FMT Multiplicity");
+              entry.addAttachment(data+"/Faraday Cup_canvas0.png", "Faraday Cup");
+              System.out.println("Farady Cup plots uploaded");
+              entry.addAttachment(data+"/FMT_canvas0.png", "FMT occupancies 2D");
+              entry.addAttachment(data+"/FMT_canvas1.png", "FMT Time of Max");
+              entry.addAttachment(data+"/FMT_canvas2.png", "FMT occupancies 1D");
+              entry.addAttachment(data+"/FMT_canvas3.png", "FMT Mulriplicity");
               System.out.println("FMT plots uploaded");
-              entry.addAttachment(data+"/FTCAL_canvas0_"+tstamp+".png", "FTCAL");
+              entry.addAttachment(data+"/FTCAL_canvas0.png", "FTCAL");
               System.out.println("FTCAL plot uploaded");
-              entry.addAttachment(data+"/FTHODO_canvas0_"+tstamp+".png", "FTHODO FADC occupancies");
-              entry.addAttachment(data+"/FTHODO_canvas1_"+tstamp+".png", "FTHODO FADC spectra");
+              entry.addAttachment(data+"/FTHODO_canvas0.png", "FTHODO FADC occupancies");
+              entry.addAttachment(data+"/FTHODO_canvas1.png", "FTHODO FADC spectra");
               System.out.println("FTHODO plots uploaded");
-              entry.addAttachment(data+"/FTOF_canvas0_"+tstamp+".png", "FTOF ADC occupancies");
-              entry.addAttachment(data+"/FTOF_canvas1_"+tstamp+".png", "FTOF TDC occupancies");
-              entry.addAttachment(data+"/FTOF_canvas2_"+tstamp+".png", "FTOF ADC histograms");
-              entry.addAttachment(data+"/FTOF_canvas3_"+tstamp+".png", "FTOF FADC timing");
-              entry.addAttachment(data+"/FTOF_canvas4_"+tstamp+".png", "FTOF TDC histograms");
-              entry.addAttachment(data+"/FTOF_canvas5_"+tstamp+".png", "FTOF GMEAN");
+              entry.addAttachment(data+"/FTOF_canvas0.png", "FTOF ADC occupancies");
+              entry.addAttachment(data+"/FTOF_canvas1.png", "FTOF TDC occupancies");
+              entry.addAttachment(data+"/FTOF_canvas2.png", "FTOF ADC histograms");
+              entry.addAttachment(data+"/FTOF_canvas3.png", "FTOF TDC histograms");
+              entry.addAttachment(data+"/FTOF_canvas4.png", "FTOF GMEAN");
               System.out.println("FTOF plots uploaded");
-              entry.addAttachment(data+"/FTTRK_canvas0_"+tstamp+".png", "FTTRK occupancies 2D");
-              entry.addAttachment(data+"/FTTRK_canvas1_"+tstamp+".png", "FTTRK occupancies 1D");
-              entry.addAttachment(data+"/FTTRK_canvas2_"+tstamp+".png", "FTTRK average time maximum");
-              entry.addAttachment(data+"/FTTRK_canvas3_"+tstamp+".png", "FTTRK ADC and time spectra");
+              entry.addAttachment(data+"/FTTRK_canvas0.png", "FTTRK occupancies 2D");
+              entry.addAttachment(data+"/FTTRK_canvas1.png", "FTTRK occupancies 1D");
+              entry.addAttachment(data+"/FTTRK_canvas2.png", "FTTRK average time maximum");
+              entry.addAttachment(data+"/FTTRK_canvas3.png", "FTTRK ADC and time spectra");
               System.out.println("FTTRK plots uploaded");
-              //entry.addAttachment(data+"/HEL_canvas0_"+tstamp+".png", "Helicity");
-              //System.out.println("Helicity plot uploaded");
-              entry.addAttachment(data+"/HTCC_canvas0_"+tstamp+".png", "HTCC occupancies");
-              entry.addAttachment(data+"/HTCC_canvas1_"+tstamp+".png", "HTCC ADC spectra");
-              entry.addAttachment(data+"/HTCC_canvas2_"+tstamp+".png", "HTCC FADC timing spectra");
-              //entry.addAttachment(data+"/HTCC_canvas3_"+tstamp+".png", "HTCC TDC spectra");
+              entry.addAttachment(data+"/HEL_canvas0.png", "Helicity");
+              System.out.println("Helicity plot uploaded");
+              entry.addAttachment(data+"/HTCC_canvas0.png", "HTCC occupancies");
+              entry.addAttachment(data+"/HTCC_canvas1.png", "HTCC ADC spectra");
+              entry.addAttachment(data+"/HTCC_canvas2.png", "HTCC timing spectra");
               System.out.println("HTCC plots uploaded");
-              entry.addAttachment(data+"/LTCC_canvas0_"+tstamp+".png", "LTCC ADC occupancies and spectra");
-              entry.addAttachment(data+"/LTCC_canvas1_"+tstamp+".png", "LTCC FADC timing");
-              //entry.addAttachment(data+"/LTCC_canvas2_"+tstamp+".png", "LTCC TDC occupancies and spectra");
+              entry.addAttachment(data+"/LTCC_canvas0.png", "LTCC occupancies");
+              entry.addAttachment(data+"/LTCC_canvas1.png", "LTCC occupancies normalized");
               System.out.println("LTTC plots uploaded");
-              System.out.println("RICH plot uploaded");
-              entry.addAttachment(data+"/RICH_canvas0_"+tstamp+".png", "RICH occupancy");
-              //entry.addAttachment(data+"/RECON_canvas0_"+tstamp+".png", "RECON CVT cosmic");
-              //entry.addAttachment(data+"/RECON_canvas1_"+tstamp+".png", "RECON CVT positive tracks");
-              //entry.addAttachment(data+"/RECON_canvas2_"+tstamp+".png", "RECON CVT negative tracks");
-              //entry.addAttachment(data+"/RECON_canvas3_"+tstamp+".png", "RECON DC tracks per event");
-              //entry.addAttachment(data+"/RECON_canvas4_"+tstamp+".png", "RECON DC hits per track");
-              //entry.addAttachment(data+"/RECON_canvas5_"+tstamp+".png", "RECON DC momentum");
-              //entry.addAttachment(data+"/RECON_canvas6_"+tstamp+".png", "RECON DC theta angle");
-              //System.out.println("RECON plots uploaded");
-              entry.addAttachment(data+"/RF_canvas0_"+tstamp+".png", "RF canvas 1");
-              entry.addAttachment(data+"/RF_canvas1_"+tstamp+".png", "RF canvas 2");
-              entry.addAttachment(data+"/RF_canvas2_"+tstamp+".png", "RF canvas 3");
-              entry.addAttachment(data+"/RF_canvas3_"+tstamp+".png", "RF canvas 4");
+              entry.addAttachment(data+"/RECON_canvas0.png", "RECON CVT cosmic");
+              entry.addAttachment(data+"/RECON_canvas1.png", "RECON CVT positive tracks");
+              entry.addAttachment(data+"/RECON_canvas2.png", "RECON CVT negative tracks");
+              entry.addAttachment(data+"/RECON_canvas3.png", "RECON DC tracks per event");
+              entry.addAttachment(data+"/RECON_canvas4.png", "RECON DC hits per track");
+              entry.addAttachment(data+"/RECON_canvas5.png", "RECON DC momentum");
+              entry.addAttachment(data+"/RECON_canvas6.png", "RECON DC theta angle");
+              System.out.println("RECON plots uploaded");
+              entry.addAttachment(data+"/RF_canvas0.png", "RF canvas 1");
+              entry.addAttachment(data+"/RF_canvas1.png", "RF canvas 2");
               System.out.println("RF plots uploaded");
-              entry.addAttachment(data+"/HEL_canvas0_"+tstamp+".png", "HEL canvas 1");
-              entry.addAttachment(data+"/HEL_canvas1_"+tstamp+".png", "HEL canvas 2");
-              System.out.println("HEL plots uploaded");
-              entry.addAttachment(data+"/Trigger_canvas0_"+tstamp+".png", "Trigger bits");
-              //entry.addAttachment(data+"/Trigger_canvas1_"+tstamp+".png", "Trigger EC peak");
-              //entry.addAttachment(data+"/Trigger_canvas2_"+tstamp+".png", "Trigger EC cluster");
-              //entry.addAttachment(data+"/Trigger_canvas3_"+tstamp+".png", "Trigger HTCC cluster");
-              //entry.addAttachment(data+"/Trigger_canvas4_"+tstamp+".png", "Trigger FTOF cluster");
+              entry.addAttachment(data+"/RICH_canvas0.png", "RICH occupancy");
+              System.out.println("RICH plot uploaded");
+              entry.addAttachment(data+"/Trigger_canvas0.png", "Trigger bits");
+              entry.addAttachment(data+"/Trigger_canvas1.png", "Trigger EC peak");
+              entry.addAttachment(data+"/Trigger_canvas2.png", "Trigger EC cluster");
+              entry.addAttachment(data+"/Trigger_canvas3.png", "Trigger HTCC cluster");
+              entry.addAttachment(data+"/Trigger_canvas4.png", "Trigger FTOF cluster");
               System.out.println("Trigger plots uploaded");
 
               long lognumber = entry.submitNow();
               System.out.println("Successfully submitted log entry number: " + lognumber); 
-            } catch(Exception exc){
-                exc.printStackTrace(); 
-                System.out.println( exc.getMessage());
-            }
+            } catch(Exception exc){}
               
         }
         
@@ -706,8 +631,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         if(e.getActionCommand()=="Upload occupancy histos to the logbook") {   
                 
             DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
-            String tstamp = df.format(new Date());
-            String data = outPath + "/output" + "/clas12mon_" + this.runNumber + "_" + tstamp;        
+            String data = System.getProperty("user.dir") + "/output" + "/clas12mon_" + this.runNumber + "_" + df.format(new Date());        
             File theDir = new File(data);
             // if the directory does not exist, create it
             if (!theDir.exists()) {
@@ -717,97 +641,83 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                 if(result){ System.out.println("Created directory: " + data);}
             }
             
-            String fileName1 = data + "/summary_FD_"+tstamp+".png";
+            String fileName1 = data + "/summary_FD.png";
             System.out.println(fileName1);
             CLAS12Canvas.getCanvas("FD").save(fileName1);
-            String fileName2 = data + "/summary_CD_"+tstamp+".png";
+            String fileName2 = data + "/summary_CD.png";
             System.out.println(fileName2);
             CLAS12Canvas.getCanvas("CD").save(fileName2);
-            String fileName3 = data + "/summary_FT_"+tstamp+".png";
+            String fileName3 = data + "/summary_FT.png";
             System.out.println(fileName3);
             CLAS12Canvas.getCanvas("FT").save(fileName3);
             
             for(int k=0; k<this.monitors.length; k++) {
-                this.monitors[k].printCanvas(data,tstamp);
+                this.monitors[k].printCanvas(data);
             }
             
-            LogEntry entry = new LogEntry("Occupancy online monitoring histograms for run number " + this.runNumber, "HBLOG");
+            LogEntry entry = new LogEntry("Occupancy online monitoring histograms for run number " + this.runNumber, "TLOG");     // change to HBLOG
             
             System.out.println("Starting to upload the occupancy plots");
             
             try{
-              entry.addAttachment(data+"/summary_FD_"+tstamp+".png", "Summary plots for the forward detector");
-              entry.addAttachment(data+"/summary_CD_"+tstamp+".png", "Summary plots for the central detector");
-              entry.addAttachment(data+"/summary_FT_"+tstamp+".png", "Summary plots for the forward tagger");
+              entry.addAttachment(data+"/summary_FD.png", "Summary plots for the forward detector");
+              entry.addAttachment(data+"/summary_CD.png", "Summary plots for the central detector");
+              entry.addAttachment(data+"/summary_FT.png", "Summary plots for the forward tagger");
               System.out.println("Summary plots uploaded");
-              entry.addAttachment(data+"/BMT_canvas0_"+tstamp+".png", "BMT occupancies");
-              entry.addAttachment(data+"/BMT_canvas1_"+tstamp+".png", "BMT occupancies c");
-              entry.addAttachment(data+"/BMT_canvas2_"+tstamp+".png", "BMT occupancies z");
+              entry.addAttachment(data+"/BMT_canvas0.png", "BMT occupancies");
+              entry.addAttachment(data+"/BMT_canvas1.png", "BMT occupancies c");
+              entry.addAttachment(data+"/BMT_canvas2.png", "BMT occupancies z");
               System.out.println("BMT plots uploaded");
-              entry.addAttachment(data+"/BST_canvas0_"+tstamp+".png", "BST occupancies 2D");
-              entry.addAttachment(data+"/BST_canvas1_"+tstamp+".png", "BST occupancies 1D"); 
+              entry.addAttachment(data+"/BST_canvas0.png", "BST occupancies 2D");
+              entry.addAttachment(data+"/BST_canvas1.png", "BST occupancies 1D"); 
               System.out.println("BST plots uploaded");
-              entry.addAttachment(data+"/CND_canvas0_"+tstamp+".png", "CND ADC occupancies and spectra");
-              entry.addAttachment(data+"/CND_canvas1_"+tstamp+".png", "CND TDC occupancies and spectra");
+              entry.addAttachment(data+"/CND_canvas0.png", "CND ADC occupancies");
+              entry.addAttachment(data+"/CND_canvas1.png", "CND TDC occupancies");
               System.out.println("CND plots uploaded");
-              entry.addAttachment(data+"/CTOF_canvas0_"+tstamp+".png", "CTOF ADC occupancies and spectra");
-              entry.addAttachment(data+"/CTOF_canvas1_"+tstamp+".png", "CTOF TDC occupancies and spectra");
+              entry.addAttachment(data+"/CTOF_canvas0.png", "CTOF ADC occupancies");
+              entry.addAttachment(data+"/CTOF_canvas1.png", "CTOF TDC occupancies");
               System.out.println("CTOF plots uploaded");
-              entry.addAttachment(data+"/DC_canvas0_"+tstamp+".png", "DC occupancies raw");
-              entry.addAttachment(data+"/DC_canvas1_"+tstamp+".png", "DC occupancies normalized logarithmic scale");
-              entry.addAttachment(data+"/DC_canvas2_"+tstamp+".png", "DC occupancies normalized linear scale");
-              entry.addAttachment(data+"/DC_canvas3_"+tstamp+".png", "DC region occupancies");
+              entry.addAttachment(data+"/DC_canvas0.png", "DC occupancies raw");
+              entry.addAttachment(data+"/DC_canvas1.png", "DC occupancies normalized");
               System.out.println("DC plots uploaded");
-              entry.addAttachment(data+"/ECAL_canvas0_"+tstamp+".png", "ECAL ADC occupancies");
-              entry.addAttachment(data+"/ECAL_canvas1_"+tstamp+".png", "ECAL TDC occupancies");
+              entry.addAttachment(data+"/ECAL_canvas0.png", "ECAL ADC occupancies");
+              entry.addAttachment(data+"/ECAL_canvas1.png", "ECAL TDC occupancies");
               System.out.println("ECAL plots uploaded");
-              entry.addAttachment(data+"/FMT_canvas0_"+tstamp+".png", "FMT occupancies 2D");
-              entry.addAttachment(data+"/FMT_canvas2_"+tstamp+".png", "FMT occupancies 1D");
+              entry.addAttachment(data+"/FMT_canvas0.png", "FMT occupancies 2D");
+              entry.addAttachment(data+"/FMT_canvas2.png", "FMT occupancies 1D");
               System.out.println("FMT plots uploaded");
-              entry.addAttachment(data+"/FTCAL_canvas0_"+tstamp+".png", "FTCAL");
+              entry.addAttachment(data+"/FTCAL_canvas0.png", "FTCAL");
               System.out.println("FTCAL plot uploaded");
-              entry.addAttachment(data+"/FTHODO_canvas0_"+tstamp+".png", "FTHODO FADC occupancies");
+              entry.addAttachment(data+"/FTHODO_canvas0.png", "FTHODO FADC occupancies");
               System.out.println("FTHODO plot uploaded");
-              entry.addAttachment(data+"/FTOF_canvas0_"+tstamp+".png", "FTOF ADC occupancies");
-              entry.addAttachment(data+"/FTOF_canvas1_"+tstamp+".png", "FTOF TDC occupancies");
+              entry.addAttachment(data+"/FTOF_canvas0.png", "FTOF ADC occupancies");
+              entry.addAttachment(data+"/FTOF_canvas1.png", "FTOF TDC occupancies");
               System.out.println("FTOF plots uploaded");
-              entry.addAttachment(data+"/FTTRK_canvas0_"+tstamp+".png", "FTTRK occupancies 2D");
-              entry.addAttachment(data+"/FTTRK_canvas1_"+tstamp+".png", "FTTRK occupancies 1D");
+              entry.addAttachment(data+"/FTTRK_canvas0.png", "FTTRK occupancies 2D");
+              entry.addAttachment(data+"/FTTRK_canvas1.png", "FTTRK occupancies 1D");
               System.out.println("FTTRK plots uploaded");
-              entry.addAttachment(data+"/HTCC_canvas0_"+tstamp+".png", "HTCC occupancies");
+              entry.addAttachment(data+"/HTCC_canvas0.png", "HTCC occupancies");
               System.out.println("HTCC plot uploaded");
-              entry.addAttachment(data+"/LTCC_canvas0_"+tstamp+".png", "LTCC occupancies and spectra");
+              entry.addAttachment(data+"/LTCC_canvas0.png", "LTCC occupancies");
+              entry.addAttachment(data+"/LTCC_canvas1.png", "LTCC occupancies normalized");
               System.out.println("LTCC plots uploaded");
-              entry.addAttachment(data+"/RICH_canvas0_"+tstamp+".png", "RICH occupancy");
+              entry.addAttachment(data+"/RICH_canvas0.png", "RICH occupancy");
               System.out.println("RICH plot uploaded");
-              entry.addAttachment(data+"/Trigger_canvas0_"+tstamp+".png", "Trigger bits");
-              System.out.println("Trigger plots uploaded");
             
               long lognumber = entry.submitNow();
               System.out.println("Successfully submitted log entry number: " + lognumber); 
-            } catch(Exception exc) {
-                exc.printStackTrace(); 
-                System.out.println( exc.getMessage());
-            }
+            } catch(Exception exc){}
         }
          
          
          if (e.getActionCommand()=="Default for all"){
-<<<<<<< HEAD
-            for (int k=0;k<monitors.length;k++){
-=======
             for (int k=0;k<3;k++){
->>>>>>> Monitoring-Expert/devel
                 this.monitors[k].eventResetTime_current[k] = this.monitors[k].eventResetTime_default[k];
             }
         }
          
          if (e.getActionCommand()=="Disable histogram reset"){
-<<<<<<< HEAD
-            for (int k=0;k<monitors.length;k++){
-=======
             for (int k=0;k<3;k++){
->>>>>>> Monitoring-Expert/devel
                 this.monitors[k].eventResetTime_current[k] = 0;
             }
         }
@@ -897,21 +807,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         
 	    if(event!=null ){
             //event.show();
-<<<<<<< HEAD
-            
-            if(event instanceof EvioDataEvent){
-             	hipo = (HipoDataEvent) clasDecoder.getDataEvent(event);
-                DataBank   header = clasDecoder.createHeaderBank(hipo, this.ccdbRunNumber, 0, (float) 0, (float) 0);
-                DataBank  trigger = clasDecoder.createTriggerBank(hipo);
-                hipo.appendBanks(header);
-                hipo.appendBank(trigger);
-                if(this.runNumber != this.getRunNumber(hipo)) {
-//                this.saveToFile("mon12_histo_run_" + runNumber + ".hipo");
-                    this.runNumber = this.getRunNumber(hipo);
-                    System.out.println("Setting run number to: " +this.runNumber);
-                    resetEventListener();
-                    this.clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
-=======
 //
 //            if (event.getType() == DataEventType.EVENT_START) {
 //                this.runNumber = this.getRunNumber(event);
@@ -938,7 +833,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
              	System.out.println("Setting run number to: " +this.runNumber);
              	resetEventListener();
              	this.clas12Textinfo.setText("\nrun number: "+this.runNumber + "\nmode:" + "\nfile:" + "\n");
->>>>>>> Monitoring-Expert/devel
 //                    this.clas12Textinfo.updateUI();
                 }
             } 
@@ -947,11 +841,11 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
             }
             
             for(int k=0; k<this.monitors.length; k++) {
-                this.monitors[k].setTriggerPhase(getTriggerPhase(hipo));
-                this.monitors[k].setTriggerWord(getTriggerWord(hipo));   
+        	    this.monitors[k].setTriggerPhase(getTriggerPhase(hipo));
+        	    this.monitors[k].setTriggerWord(getTriggerWord(hipo));        	    
                 this.monitors[k].dataEventAction(hipo);
             }      
-	}
+	    }
     }
 
     public void loadHistosFromFile(String fileName) {
@@ -1004,17 +898,10 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
         // FTOF:
         this.CLAS12Canvas.getCanvas("FD").cd(7);
         this.CLAS12Canvas.getCanvas("FD").getPad(7).getAxisZ().setLog(true);
-<<<<<<< HEAD
-        if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH1F("sum_p1"));
-        this.CLAS12Canvas.getCanvas("FD").cd(8);
-        this.CLAS12Canvas.getCanvas("FD").getPad(8).getAxisZ().setLog(true);
-        if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH1F("sum_p2"));
-=======
         //if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH2F("sum_p1"));
         this.CLAS12Canvas.getCanvas("FD").cd(8);
         this.CLAS12Canvas.getCanvas("FD").getPad(8).getAxisZ().setLog(true);
         //if(this.monitors[9].getDetectorSummary()!=null) this.CLAS12Canvas.getCanvas("FD").draw(this.monitors[9].getDetectorSummary().getH2F("sum_p2"));
->>>>>>> Monitoring-Expert/devel
         
         //////////////////////////////////////////////////
         ///  CD:
@@ -1056,8 +943,7 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
     
     public void printHistosToFile() {
         DateFormat df = new SimpleDateFormat("MM-dd-yyyy_hh.mm.ss_aa");
-        String tstamp = df.format(new Date());
-        String data = outPath + "/output" + "/clas12mon_" + this.runNumber + "_" + tstamp;        
+        String data = System.getProperty("user.dir") + "/output" + "/clas12mon_" + this.runNumber + "_" + df.format(new Date());        
         File theDir = new File(data);
         // if the directory does not exist, create it
         if (!theDir.exists()) {
@@ -1074,18 +960,18 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
             }
         }
         
-        String fileName1 = data + "/summary_FD_"+tstamp+".png";
+        String fileName1 = data + "/summary_FD.png";
         System.out.println(fileName1);
         CLAS12Canvas.getCanvas("FD").save(fileName1);
-        String fileName2 = data + "/summary_CD_"+tstamp+".png";
+        String fileName2 = data + "/summary_CD.png";
         System.out.println(fileName2);
         CLAS12Canvas.getCanvas("CD").save(fileName2);
-        String fileName3 = data + "/summary_FT_"+tstamp+".png";
+        String fileName3 = data + "/summary_FT.png";
         System.out.println(fileName3);
         CLAS12Canvas.getCanvas("FT").save(fileName3);
         
         for(int k=0; k<this.monitors.length; k++) {
-            this.monitors[k].printCanvas(data,tstamp);
+            this.monitors[k].printCanvas(data);
         }
         
         System.out.println("Histogram pngs succesfully saved in: " + data);
@@ -1172,95 +1058,16 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
    }
 
     public static void main(String[] args){
-        int xSize = 1600;
-        int ySize = 1000;
-        
-        if(args.length>0){
-            xSize = Integer.parseInt(args[0]);
-            if(args.length>1){
-                ySize = Integer.parseInt(args[1]);
-            } else {
-                ySize = (int) (xSize/1.6);
-            }
-        }
         JFrame frame = new JFrame("CLAS12Mon");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         EventViewer viewer = new EventViewer();
         //frame.add(viewer.getPanel());
         frame.add(viewer.mainPanel);
         frame.setJMenuBar(viewer.menuBar);
-        frame.setSize(xSize, ySize);
+        frame.setSize(1400, 800);
         frame.setVisible(true);
-        if (args.length>0){
-        	if (args[0]!=null){
-        		int numberOfSamples = Integer.parseInt(args[0]);
-        		if (0<numberOfSamples && numberOfSamples<100){
-        			viewer.monitors[0].setNumberOfSamples(numberOfSamples);
-        			viewer.monitors[1].setNumberOfSamples(numberOfSamples);
-        			
-        			if (args[2]!=null){
-                        int sparseReading = Integer.parseInt(args[3]);
-                        if (0<sparseReading && sparseReading<100){
-                        	viewer.monitors[0].setSparseReading(sparseReading);
-                        	viewer.monitors[1].setSparseReading(sparseReading);
-                		}
-                        
-                        viewer.pulseWindowBMT = new MVTpulseViewer("BMT", numberOfSamples, sparseReading);
-                        viewer.pulseWindowFMT = new MVTpulseViewer("FMT", numberOfSamples, sparseReading);
-                    }else{
-                    	viewer.pulseWindowBMT = new MVTpulseViewer("BMT", numberOfSamples, 0);
-                    	viewer.pulseWindowFMT = new MVTpulseViewer("FMT", numberOfSamples, 0);
-                    }
-        			
-        			
-        		}
-        	}
-        	if (args[1]!=null){
-        		int numberOfSamples = Integer.parseInt(args[2]);
-        		if (0<numberOfSamples && numberOfSamples<100){
-        			viewer.monitors[2].setNumberOfSamples(numberOfSamples);
-        		}
-        		if (args[3]!=null){
-                    int sparseReading = Integer.parseInt(args[4]);
-                    if (0<sparseReading && sparseReading<100){
-                    	viewer.monitors[2].setSparseReading(sparseReading);
-            		}
-                    
-                    viewer.pulseWindowFTT = new MVTpulseViewer("FTT", numberOfSamples, sparseReading);
-                }else{
-                	viewer.pulseWindowFTT = new MVTpulseViewer("FTT", numberOfSamples, 0);
-                }
-        	}
-        	
-        }
-        
     }
     
-<<<<<<< HEAD
-    
-    private void setDCRange(String actionCommand) {
-    
-        System.out.println("Set normalized DC occuopancy range maximum");
-        String  DC_scale = (String) JOptionPane.showInputDialog(null, "Set normalized DC occuopancy range maximum to ", " ", JOptionPane.PLAIN_MESSAGE, null, null, "15");
-        
-        if (DC_scale != null) { 
-            double DC_scale_max= 0;
-            try {DC_scale_max = Double.parseDouble(DC_scale);} 
-            catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
-            if (DC_scale_max > 0){ this.monitors[4].max_occ = DC_scale_max;} 
-            else {JOptionPane.showMessageDialog(null, "Value must be a positive number!");}   
-        }
-        
-    }
-    
-    private void setRunNumber(String actionCommand) {
-    
-        System.out.println("Set run number for CCDB access");
-        String  RUN_number = (String) JOptionPane.showInputDialog(null, "Set run number to ", " ", JOptionPane.PLAIN_MESSAGE, null, null, "2284");
-        
-        if (RUN_number != null) { 
-            int cur_runNumber= this.runNumber;
-=======
     private void setRunNumber(String actionCommand) {
         
     	System.out.println("Set run number for CCDB access");
@@ -1268,7 +1075,6 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
     	
     	if (RUN_number != null) { 
     		int cur_runNumber= this.runNumber;
->>>>>>> Monitoring-Expert/devel
             try {
                 cur_runNumber = Integer.parseInt(RUN_number);
             } 
@@ -1278,16 +1084,9 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
             if (cur_runNumber > 0){ 
                 this.ccdbRunNumber = cur_runNumber;
                 clasDecoder.setRunNumber(cur_runNumber,true);
-<<<<<<< HEAD
-            } 
-            else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
-        }
-        
-=======
             }
     		else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
     	}    
->>>>>>> Monitoring-Expert/devel
     }
 
     private void resetHistograms(String actionCommand) {
@@ -1401,14 +1200,14 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     if (resetOption == JOptionPane.YES_OPTION) {
                         String  resetTiming = (String) JOptionPane.showInputDialog(null, "Update every (number of events)", " ", JOptionPane.PLAIN_MESSAGE, null, null, "10000");
                         if (resetTiming != null) {    
-                            int time = this.monitors[1].eventResetTime_default[1];
+                            int time = this.monitors[6].eventResetTime_default[6];
                             try {time = Integer.parseInt(resetTiming);} 
                             catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
-                            if (time > 0) {this.monitors[1].eventResetTime_current[1] = time;} 
+                            if (time > 0) {this.monitors[6].eventResetTime_current[6] = time;} 
                             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
                         }
                     }else if (resetOption == JOptionPane.NO_OPTION){
-                    	this.monitors[1].eventResetTime_current[1] = 0;
+ 			this.monitors[6].eventResetTime_current[6] = 0;
                     }	
          }
         
@@ -1418,16 +1217,20 @@ public class EventViewer implements IDataEventListener, DetectorListener, Action
                     if (resetOption == JOptionPane.YES_OPTION) {
                         String  resetTiming = (String) JOptionPane.showInputDialog(null, "Update every (number of events)", " ", JOptionPane.PLAIN_MESSAGE, null, null, "10000");
                         if (resetTiming != null) {    
-                            int time = this.monitors[2].eventResetTime_default[2];
+                            int time = this.monitors[7].eventResetTime_default[7];
                             try {time = Integer.parseInt(resetTiming);} 
                             catch (NumberFormatException f) {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}
                             if (time > 0) {
-                                this.monitors[2].eventResetTime_current[2] = time;
+                                this.monitors[7].eventResetTime_current[7] = time;
+                                this.monitors[8].eventResetTime_current[8] = time;
+                                this.monitors[10].eventResetTime_current[10] = time;
                             } 
                             else {JOptionPane.showMessageDialog(null, "Value must be a positive integer!");}   
                         }
                     }else if (resetOption == JOptionPane.NO_OPTION){
-                    	this.monitors[2].eventResetTime_current[2] = 0;
+ 			this.monitors[7].eventResetTime_current[7] = 0;
+                        this.monitors[8].eventResetTime_current[8] = 0;
+                        this.monitors[10].eventResetTime_current[10] = 0;
                     }	
          }
         

@@ -49,7 +49,6 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
     public int bitsec = 0;
     public long trigger = 0;
     public long triggerPhase = 0;
-    public double max_occ = 4;
     public int trigFD = 0;
     public int trigCD = 0;
     
@@ -58,27 +57,13 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
     public int TriggerMask = 0;
     
     public int eventResetTime_current[]=new int[19];
-    public int eventResetTime_default[]=new int[19];  
-    
-    public int numberOfSamples;
-    public int sparseReading;
+    public int eventResetTime_default[]=new int[19];    
     
     public DetectorMonitor(String name){
-        GStyle.getAxisAttributesX().setTitleFontSize(14); //24
-        GStyle.getAxisAttributesX().setLabelFontSize(14); //18
-        GStyle.getAxisAttributesY().setTitleFontSize(14); //24
-        GStyle.getAxisAttributesY().setLabelFontSize(14); //18
-        GStyle.getAxisAttributesZ().setLabelFontSize(14); //14
-        GStyle.setPalette("kDefault");
-        GStyle.getAxisAttributesX().setLabelFontName("Avenir");
-        GStyle.getAxisAttributesY().setLabelFontName("Avenir");
-        GStyle.getAxisAttributesZ().setLabelFontName("Avenir");
-        GStyle.getAxisAttributesX().setTitleFontName("Avenir");
-        GStyle.getAxisAttributesY().setTitleFontName("Avenir");
-        GStyle.getAxisAttributesZ().setTitleFontName("Avenir");
-        GStyle.setGraphicsFrameLineWidth(1);
-        GStyle.getH1FAttributes().setLineWidth(1);
-
+        GStyle.getAxisAttributesX().setTitleFontSize(18);
+        GStyle.getAxisAttributesX().setLabelFontSize(14);
+        GStyle.getAxisAttributesY().setTitleFontSize(18);
+        GStyle.getAxisAttributesY().setLabelFontSize(14);
         this.detectorName = name;
         this.detectorPanel  = new JPanel();
         this.detectorCanvas = new EmbeddedCanvasTabbed();
@@ -141,7 +126,6 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
     
     @Override
     public void dataEventAction(DataEvent event) {
-        if (!testTriggerMask()) return;
         this.setNumberOfEvents(this.getNumberOfEvents()+1);
         if (event.getType() == DataEventType.EVENT_START) {
 //            resetEventListener();
@@ -324,10 +308,10 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
 
     }
     
-    public void printCanvas(String dir, String timestamp) {
+    public void printCanvas(String dir) {
         // print canvas to files
         for(int tab=0; tab<this.detectorTabNames.size(); tab++) {
-            String fileName = dir + "/" + this.detectorName + "_canvas" + tab + "_" + timestamp + ".png";
+            String fileName = dir + "/" + this.detectorName + "_canvas" + tab + ".png";
             System.out.println(fileName);
             this.detectorCanvas.getCanvas(this.detectorTabNames.get(tab)).save(fileName);
         }
@@ -438,12 +422,4 @@ public class DetectorMonitor implements IDataEventListener, ActionListener {
         }
     }
         
-    public void setNumberOfSamples(int numberOfSamples){
-    	this.numberOfSamples=numberOfSamples;
-    }
-    
-    public void setSparseReading(int sparseReading){
-    	this.sparseReading=sparseReading;
-    }
-    
 }
